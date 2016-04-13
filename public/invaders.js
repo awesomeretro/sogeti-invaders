@@ -693,14 +693,14 @@ function drawGame(resized) {
 
 function drawStartScreen() {
     fillCenteredText("Sogeti Space Invaders", CANVAS_WIDTH/2, CANVAS_HEIGHT/2.75, '#FFFFFF', 36);
-    fillBlinkingText("PRESS FIRE", CANVAS_WIDTH/2, CANVAS_HEIGHT/2, 500, '#FFFFFF', 36);
+    fillBlinkingText("<-- SCAN YOUR BADGE TO START", CANVAS_WIDTH/2, CANVAS_HEIGHT - 42, 500, '#FFFFFF', 36);
 }
 
 function animate() {
     var now = window.performance.now();
     var dt = now - lastTime;
     if (dt > 100) dt = 100;
-    if (wasKeyPressed(13) && !hasGameStarted) {
+    if (wasKeyPressed(SHOOT_KEY) && !hasGameStarted) {
         initGame();
         hasGameStarted = true;
     }
