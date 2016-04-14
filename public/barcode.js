@@ -30,4 +30,5 @@ Replacing all tabs by newlines will give us:
 function CheckBarCode(p_sText)
 {
     return (p_sText.length > 0);
+    // TODO: should contain 16 tabs & one newline
 } // function

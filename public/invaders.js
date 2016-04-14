@@ -97,10 +97,11 @@ var PLAYER_CLIP_RECT = { x: 0, y: 204, w: 62, h: 32 };
 var ALIEN_BOTTOM_ROW = [ { x: 0, y: 0, w: 51, h: 34 }, { x: 0, y: 102, w: 51, h: 34 }];
 var ALIEN_MIDDLE_ROW = [ { x: 0, y: 137, w: 50, h: 33 }, { x: 0, y: 170, w: 50, h: 34 }];
 var ALIEN_TOP_ROW = [ { x: 0, y: 68, w: 50, h: 32 }, { x: 0, y: 34, w: 50, h: 32 }];
-var ALIEN_X_MARGIN = 40;
-var ALIEN_SQUAD_WIDTH = 11 * ALIEN_X_MARGIN;
-
-
+var ALIEN_X_MARGIN = 42;
+var ALIEN_Y_TOP = 42;
+var ALIEN_SQUAD_WIDTH = 12 * ALIEN_X_MARGIN;
+var INIT_PLAYER_LIVES = 1;
+var INVADERS_TRIGGERHAPPY = 7; // higher is more bombs
 
 // ###################################################################
 // Utility functions & classes
@@ -181,6 +182,9 @@ var alienYDown = 0;
 var alienCount = 0;
 var wave = 1;
 var hasGameStarted = false;
+var hasDied = false;
+
+var nHighScore = document.cookie.replace(/(?:(?:^|.*;\s*)highscore\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
 var sndInvaderStep1 = new Audio("sounds/invader-step1.wav");
 var sndInvaderStep2 = new Audio("sounds/invader-step2.wav");
@@ -255,8 +259,8 @@ var SheetSprite = BaseSprite.extend({
 var Player = SheetSprite.extend({
     init: function() {
         this._super(spriteSheetImg, PLAYER_CLIP_RECT, CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
-        this.scale.set(0.85, 0.85);
-        this.lives = 3;
+        this.scale.set(0.75, 0.75);
+        this.lives = INIT_PLAYER_LIVES;
         this.xVel = 0;
         this.bullets = [];
         this.bulletDelayAccumulator = 0;
@@ -264,7 +268,7 @@ var Player = SheetSprite.extend({
     },
 
     reset: function() {
-        this.lives = 3;
+        this.lives = INIT_PLAYER_LIVES;
         this.score = 0;
         this.position.set(CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
     },
@@ -357,7 +361,7 @@ var Enemy = SheetSprite.extend({
         this.scale.set(0.5, 0.5);
         this.alive = true;
         this.onFirstState = true;
-        this.stepDelay = 2; // try 2 secs to start with...
+        this.stepDelay = 1; // try 2 secs to start with...
         this.stepAccumulator = 0;
         this.doShoot = false;
         this.bullet = null;
@@ -401,13 +405,13 @@ var Enemy = SheetSprite.extend({
             } if (alienDirection === 1 && this.position.x > CANVAS_WIDTH - this.bounds.w/2 - 20) {
                 updateAlienLogic = true;
             }
-            if (this.position.y > CANVAS_HEIGHT - 50) {
+            if (this.position.y > CANVAS_HEIGHT - 80) {
                 playerDies();
                 reset();
             }
 
             var fireTest = Math.floor(Math.random() * (this.stepDelay + 1));
-            if (getRandomArbitrary(0, 1000) <= 5 * (this.stepDelay + 1)) {
+            if (getRandomArbitrary(0, 1000) <= INVADERS_TRIGGERHAPPY * (this.stepDelay + 1)) {
                 this.doShoot = true;
             }
             this.position.x += 10 * alienDirection;
@@ -545,9 +549,9 @@ function initGame() {
 
 function setupAlienFormation() {
     alienCount = 0;
-    for (var i = 0, len = 5 * 11; i < len; i++) {
-        var gridX = (i % 11);
-        var gridY = Math.floor(i / 11);
+    for (var i = 0, len = 5 * 12; i < len; i++) {
+        var gridX = (i % 12);
+        var gridY = Math.floor(i / 12);
         var clipRects;
         switch (gridY) {
             case 0:
@@ -556,7 +560,7 @@ function setupAlienFormation() {
             case 3: clipRects = ALIEN_MIDDLE_ROW; break;
             case 4: clipRects = ALIEN_TOP_ROW; break;
         }
-        aliens.push(new Enemy(clipRects, (CANVAS_WIDTH/2 - ALIEN_SQUAD_WIDTH/2) + ALIEN_X_MARGIN/2 + gridX * ALIEN_X_MARGIN, CANVAS_HEIGHT/3.25 - gridY * 40));
+        aliens.push(new Enemy(clipRects, (CANVAS_WIDTH/2 - ALIEN_SQUAD_WIDTH/2) + ALIEN_X_MARGIN/2 + gridX * ALIEN_X_MARGIN, CANVAS_HEIGHT/3.25 - gridY * 40 + ALIEN_Y_TOP));
         alienCount++;
     }
 }
@@ -565,6 +569,7 @@ function reset() {
     aliens = [];
     setupAlienFormation();
     player.reset();
+    hasDied = false;
 }
 
 function init() {
@@ -600,7 +605,7 @@ function updateAliens(dt) {
     if (updateAlienLogic) {
         updateAlienLogic = false;
         alienDirection = -alienDirection;
-        alienYDown = 25;
+        alienYDown = 42;
     }
 
     for (var i = aliens.length - 1; i >= 0; i--) {
@@ -681,6 +686,14 @@ function resolveBulletPlayerCollisions() {
         var alien = aliens[i];
         if (alien.bullet !== null && checkRectCollision(alien.bullet.bounds, player.bounds)) {
             if (player.lives === 0) {
+                if (player.score > nHighScore) {
+                    nHighScore = player.score;
+                    document.cookie = "highscore="+ nHighScore;
+                } // if
+                // show died-screen:
+                hasDied = true;
+                // TODO: store barcode in database
+                document.getElementById("barinput").value = "";
                 hasGameStarted = false;
                 sndAttract.play();
             } else {
@@ -724,7 +737,11 @@ function drawIntoCanvas(width, height, drawFunc) {
 }
 
 function fillText(text, x, y, color, fontSize) {
-    if (typeof color !== 'undefined') ctx.fillStyle = color;
+    if (typeof color !== 'undefined') {
+        ctx.fillStyle = color;
+    } else {
+        ctx.fillStyle = "white";
+    }
     if (typeof fontSize !== 'undefined') ctx.font = fontSize + 'px Play';
     ctx.fillText(text, x, y);
 }
@@ -734,22 +751,39 @@ function fillCenteredText(text, x, y, color, fontSize) {
     fillText(text, x - metrics.width/2, y, color, fontSize);
 }
 
+function fillRightText(text, x, y, color, fontSize) {
+    var metrics = ctx.measureText(text);
+    fillText(text, x - metrics.width, y, color, fontSize);
+}
+
 function fillBlinkingText(text, x, y, blinkFreq, color, fontSize) {
     if (~~(0.5 + Date.now() / blinkFreq) % 2) {
         fillCenteredText(text, x, y, color, fontSize);
     }
 }
 
+function fillRightBlinkingText(text, x, y, blinkFreq, color, fontSize) {
+    if (~~(0.5 + Date.now() / blinkFreq) % 2) {
+        fillRightText(text, x, y, color, fontSize);
+    }
+}
+
 function drawBottomHud() {
     ctx.fillStyle = '#02ff12';
     ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 2);
-    fillText(player.lives + ' x ', 10, CANVAS_HEIGHT - 7.5, 'white', 20);
-    ctx.drawImage(spriteSheetImg, player.clipRect.x, player.clipRect.y, player.clipRect.w,
-        player.clipRect.h, 45, CANVAS_HEIGHT - 23, player.clipRect.w * 0.5,
-        player.clipRect.h * 0.5);
-    fillText('CREDIT: ', CANVAS_WIDTH - 115, CANVAS_HEIGHT - 7.5);
-    fillCenteredText('SCORE: ' + player.score, CANVAS_WIDTH/2, 20);
-    fillBlinkingText('00', CANVAS_WIDTH - 25, CANVAS_HEIGHT - 7.5, TEXT_BLINK_FREQ);
+    fillText("LIVES", 10, CANVAS_HEIGHT - 7.5, (player.lives >= 1 ? 'white' : 'red'), 20);
+    for (n = 0; n < player.lives; n++) {
+        ctx.drawImage(spriteSheetImg, player.clipRect.x, player.clipRect.y, player.clipRect.w,
+            player.clipRect.h, 75 + (42 * n), CANVAS_HEIGHT - 23, player.clipRect.w * 0.5,
+            player.clipRect.h * 0.5);
+    } // fore
+    fillRightText('PLAYER: <name>', CANVAS_WIDTH - 20, CANVAS_HEIGHT - 7.5);
+    if (player.score > nHighScore) {
+        fillRightBlinkingText('HIGHSCORE: '+ player.score, CANVAS_WIDTH - 20, 20, TEXT_BLINK_FREQ);
+    } else {
+        fillRightText('HIGHSCORE: '+ nHighScore, CANVAS_WIDTH - 20, 20);
+    } // if
+    fillText('SCORE: ' + player.score, 20, 20);
 }
 
 function drawAliens(resized) {
@@ -767,10 +801,20 @@ function drawGame(resized) {
 }
 
 function drawStartScreen() {
-
     fillCenteredText("Sogeti Space Invaders", CANVAS_WIDTH/2, CANVAS_HEIGHT/2.75, '#FFFFFF', 36);
     fillBlinkingText("<-- SCAN YOUR BADGE TO START", CANVAS_WIDTH/2, CANVAS_HEIGHT - 42, 500, '#FFFFFF', 36);
+    fillRightText('CURRENT HIGHSCORE: '+ nHighScore, CANVAS_WIDTH - 20, 42, "grey", 18);
 }
+
+function drawDeadScreen() {
+    fillCenteredText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2.5, 'white', 42);
+    fillCenteredText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2.75, "white", 24);
+    if (player.score < nHighScore) {
+        fillCenteredText("Highscore: "+ nHighScore, CANVAS_WIDTH/2, CANVAS_HEIGHT/3, "#999", 24);
+    } else {
+        fillCenteredText("CONGRATULATIONS, YOU HAVE BEATEN THE HIGHSCORE!", CANVAS_WIDTH/2, CANVAS_HEIGHT/3, "#999", 24);
+    } // if
+} // function
 
 function hasValidBarcode()
 {
@@ -785,6 +829,9 @@ function animate() {
     //if (wasKeyPressed(SHOOT_KEY) && !hasGameStarted) {
     if (hasGameStarted) {
         updateGame(dt / 1000);
+    } else if (hasDied) {
+        if (wasKeyPressed(SHOOT_KEY)) hasDied = false;
+        hasGameStarted = false;
     } else if (hasValidBarcode()) {
         initGame();
         hasGameStarted = true;
@@ -796,6 +843,8 @@ function animate() {
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     if (hasGameStarted) {
         drawGame(false);
+    } else if (hasDied) {
+        drawDeadScreen();
     } else {
         drawStartScreen();
     } // if
