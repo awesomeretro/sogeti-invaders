@@ -85,9 +85,10 @@
 //
 // ###################################################################
 var IS_CHROME = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-var CANVAS_WIDTH = 640;
-var CANVAS_HEIGHT = 640;
-var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAACGUlEQVR42u3aSQ7CMBAEQIsn8P+/hiviAAK8zFIt5QbELiTHmfEYE3L9mZE9AAAAqAVwBQ8AAAD6THY5CgAAAKbfbPX3AQAAYBEEAADAuZrC6UUyfMEEAIBiAN8OePXnAQAAsLcmmKFPAQAAgHMbm+gbr3Sdo/LtcAAAANR6GywPAgBAM4D2JXAAABoBzBjA7AmlOx8AAEAzAOcDAADovTc4vQim6wUCABAYQG8QAADd4dPd2fRVYQAAANQG0B4HAABAawDnAwAA6AXgfAAAALpA2uMAAABwPgAAgPoAM9Ci/R4AAAD2dmqcEQIAIC/AiQGuAAYAAECcRS/a/cJXkUf2AAAAoBaA3iAAALrD+gIAAADY9baX/nwAAADNADwFAADo9YK0e5FMX/UFACA5QPSNEAAAAHKtCekmDAAAAADvBljtfgAAAGgMMGOrunvCy2uCAAAACFU6BwAAwF6AGQPa/XsAAADYB+B8AAAAtU+ItD4OAwAAAFVhAACaA0T7B44/BQAAANALwGMQAAAAADYO8If2+P31AgAAQN0SWbhFDwCAZlXgaO1xAAAA1FngnA8AACAeQPSNEAAAAM4CnC64AAAA4GzN4N9NSfgKEAAAAACszO26X8/X6BYAAAD0Anid8KcLAAAAAAAAAJBnwNEvAAAA9Jns1ygAAAAAAAAAAAAAAAAAAABAQ4COCENERERERERERBrnAa1sJuUVr3rsAAAAAElFTkSuQmCC';
+var CANVAS_WIDTH = 800;
+var CANVAS_HEIGHT = 600;
+//var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAACGUlEQVR42u3aSQ7CMBAEQIsn8P+/hiviAAK8zFIt5QbELiTHmfEYE3L9mZE9AAAAqAVwBQ8AAAD6THY5CgAAAKbfbPX3AQAAYBEEAADAuZrC6UUyfMEEAIBiAN8OePXnAQAAsLcmmKFPAQAAgHMbm+gbr3Sdo/LtcAAAANR6GywPAgBAM4D2JXAAABoBzBjA7AmlOx8AAEAzAOcDAADovTc4vQim6wUCABAYQG8QAADd4dPd2fRVYQAAANQG0B4HAABAawDnAwAA6AXgfAAAALpA2uMAAABwPgAAgPoAM9Ci/R4AAAD2dmqcEQIAIC/AiQGuAAYAAECcRS/a/cJXkUf2AAAAoBaA3iAAALrD+gIAAADY9baX/nwAAADNADwFAADo9YK0e5FMX/UFACA5QPSNEAAAAHKtCekmDAAAAADvBljtfgAAAGgMMGOrunvCy2uCAAAACFU6BwAAwF6AGQPa/XsAAADYB+B8AAAAtU+ItD4OAwAAAFVhAACaA0T7B44/BQAAANALwGMQAAAAADYO8If2+P31AgAAQN0SWbhFDwCAZlXgaO1xAAAA1FngnA8AACAeQPSNEAAAAM4CnC64AAAA4GzN4N9NSfgKEAAAAACszO26X8/X6BYAAAD0Anid8KcLAAAAAAAAAJBnwNEvAAAA9Jns1ygAAAAAAAAAAAAAAAAAAABAQ4COCENERERERERERBrnAa1sJuUVr3rsAAAAAElFTkSuQmCC';
+var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFxQo3wgFZQAAAtdJREFUeNrt3VtSwzAQRFGJygqy/zVmCYhvkhSO9RgJ6/Qv2Di33O2ZsYhy6qBSUmk5PueU0yR9pc0FAACbK48IteEX3TE0WQCA3TNgdb+PzgUWAGBz3Ub47ShXWo93BwAAgDpAHcACAIybBxxp9HM+ckjKAgDIgP6eH/377gAAAIjtBWa+vPx0PqAXYAEA6gDM9vfMWUB9M5TK0CFKTlkzBAAAACzUDQ4OvZmhyAIAyID1PB+ZCSwAwO4ZUOP3Zw+2ZkaP89XmAgsAIAPKNVaIyAAWACCsF5hdB+gFWACA2Dog8kVFTSapA1gAgL51QGtd0Nvj3guwAAAATA3BmsKkZ3PkDgAAAACWrgTHX6RKkAUAiMwAK0RYAIB9MsAKERYAQAZco6CRASwAwKh5wFGv0PvNkKEoCwCw9jzAKjEWAGCvXqC3R0dkjF6ABQCoAzB7FejMWUB1M/QSanaZkQEAAHCpbtAuMywAwD7doG+XZwEAdpZdZlgAAHWAOoAFADAPSD2fy72f83aYYAEAYjNg9k5SkbvOsAAAMqC9Dmj1pJ2mWAAAAJYOwVSelqnlwctqAv8eCwAAwO4hWN6swz0Knd4hdfZ8NdfsDgAAgHe6VXn07M8VQiwAwP+qAw6PevJkawb0OJ86gAUAiMuAJT+JDGABAKoyIKK2X8Tv7gAAAPgwAyb25+YBLADAgnVAnvwdAwOvhwUAAEAIKoRYAAAAhODUkDp5vlLK/eWD5PxwBwAAQFAhFH6VCiEWACA0A448P3uFiIkQCwDQLwOsEGEBAHbWLeQ539vfHa+HBQCQAWv159GZwwIAmAcM8GjNf35GZow7AAAAAGgKwVbq5f4rBL/zwy4zAAAAwHVD8Dn0jhQZiiwAAAAAAACAOqDtub26/qorWACA3TPgan4/mwssAAAAAAAAAAAAAAAAAAAAAMCO84CUrjcD/HQWQEREREREREREO+oHqKIhzFD4x3oAAAAASUVORK5CYII=';
 var LEFT_KEY = 37;
 var RIGHT_KEY = 39;
 var SHOOT_KEY = 88;
@@ -181,6 +182,16 @@ var alienCount = 0;
 var wave = 1;
 var hasGameStarted = false;
 
+var sndInvaderStep1 = new Audio("sounds/invader-step1.wav");
+var sndInvaderStep2 = new Audio("sounds/invader-step2.wav");
+var sndInvaderStep3 = new Audio("sounds/invader-step3.wav");
+var sndInvaderStep4 = new Audio("sounds/invader-step4.wav");
+
+var sndInvaderKilled = new Audio("sounds/invader-killed.wav");
+var sndPlayerHit = new Audio("sounds/player-explosion.wav");
+var sndShoot = new Audio("sounds/shoot.wav");
+
+var sndAttract = new Audio("sounds/attract.mpeg");
 
 
 // ###################################################################
@@ -261,6 +272,7 @@ var Player = SheetSprite.extend({
     shoot: function() {
         var bullet = new Bullet(this.position.x, this.position.y - this.bounds.h / 2, 1, 1000);
         this.bullets.push(bullet);
+        sndShoot.play();
     },
 
     handleInput: function() {
@@ -268,7 +280,9 @@ var Player = SheetSprite.extend({
             this.xVel = -175;
         } else if (isKeyDown(RIGHT_KEY)) {
             this.xVel = 175;
-        } else this.xVel = 0;
+        } else {
+            this.xVel = 0;
+        }
 
         if (wasKeyPressed(SHOOT_KEY)) {
             if (this.bulletDelayAccumulator > 0.5) {
@@ -343,9 +357,9 @@ var Enemy = SheetSprite.extend({
         this.scale.set(0.5, 0.5);
         this.alive = true;
         this.onFirstState = true;
-        this.stepDelay = 1; // try 2 secs to start with...
+        this.stepDelay = 2; // try 2 secs to start with...
         this.stepAccumulator = 0;
-        this.doShoot - false;
+        this.doShoot = false;
         this.bullet = null;
     },
 
@@ -362,12 +376,33 @@ var Enemy = SheetSprite.extend({
         this.stepAccumulator += dt;
 
         if (this.stepAccumulator >= this.stepDelay) {
+            if (!bStepSoundPlayed) {
+                bStepSoundPlayed = true;
+                switch (nStepSoundIteration) {
+                    case 1:
+                        sndInvaderStep1.play();
+                        break;
+                    case 2:
+                        sndInvaderStep2.play();
+                        break;
+                    case 3:
+                        sndInvaderStep3.play();
+                        break;
+                    case 4:
+                        sndInvaderStep4.play();
+                        nStepSoundIteration = 0;
+                        break;
+                } // switch
+                nStepSoundIteration++;
+            } // if
+
             if (this.position.x < this.bounds.w/2 + 20 && alienDirection < 0) {
                 updateAlienLogic = true;
             } if (alienDirection === 1 && this.position.x > CANVAS_WIDTH - this.bounds.w/2 - 20) {
                 updateAlienLogic = true;
             }
-            if (this.position.y > CANVAS_WIDTH - 50) {
+            if (this.position.y > CANVAS_HEIGHT - 50) {
+                playerDies();
                 reset();
             }
 
@@ -558,6 +593,9 @@ function wasKeyPressed(key) {
 // Drawing & Update functions
 //
 // ###################################################################
+
+var nStepSoundIteration = 1;
+
 function updateAliens(dt) {
     if (updateAlienLogic) {
         updateAlienLogic = false;
@@ -588,6 +626,10 @@ function updateAliens(dt) {
             alien.doShoot = false;
             alien.shoot();
         }
+
+        if (i == 0) {
+            bStepSoundPlayed = false;
+        }
     }
     alienYDown = 0;
 }
@@ -601,8 +643,34 @@ function resolveBulletEnemyCollisions() {
             var alien = aliens[j];
             if (checkRectCollision(bullet.bounds, alien.bounds)) {
                 alien.alive = bullet.alive = false;
-                particleManager.createExplosion(alien.position.x, alien.position.y, 'white', 70, 5,5,3,.15,50);
-                player.score += 25;
+
+                // determine color & score depending on type of alien we've hit:
+                switch (alien.clipRects) {
+                    case ALIEN_TOP_ROW:
+                        sColor = "magenta";
+                        nScore = 25;
+                        break;
+                    case ALIEN_MIDDLE_ROW:
+                        sColor = "cyan";
+                        nScore = 15;
+                        break;
+                    case ALIEN_BOTTOM_ROW:
+                        sColor = "yellow";
+                        nScore = 5;
+                        break;
+                    case ALIEN_MOTHERSHIP:
+                        sColor = "red";
+                        nScore = 250;
+                        break;
+                    default:
+                        sColor = "white";
+                        nScore = 0;
+                } // switch
+
+                sndInvaderKilled.play();
+
+                particleManager.createExplosion(alien.position.x, alien.position.y, sColor, 70, 5,5,3,.15,50);
+                player.score += nScore;
             }
         }
     }
@@ -614,16 +682,23 @@ function resolveBulletPlayerCollisions() {
         if (alien.bullet !== null && checkRectCollision(alien.bullet.bounds, player.bounds)) {
             if (player.lives === 0) {
                 hasGameStarted = false;
+                sndAttract.play();
             } else {
                 alien.bullet.alive = false;
-                particleManager.createExplosion(player.position.x, player.position.y, 'green', 100, 8,8,6,0.001,40);
-                player.position.set(CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
-                player.lives--;
+                playerDies();
                 break;
             }
 
         }
     }
+}
+
+function playerDies() {
+    sndPlayerHit.play();
+    particleManager.createExplosion(player.position.x, player.position.y, 'green', 100, 8,8,6,0.001,40);
+    player.position.set(CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
+    player.lives--;
+    gameCountdown = true;
 }
 
 function resolveCollisions() {
@@ -692,23 +767,30 @@ function drawGame(resized) {
 }
 
 function drawStartScreen() {
+
     fillCenteredText("Sogeti Space Invaders", CANVAS_WIDTH/2, CANVAS_HEIGHT/2.75, '#FFFFFF', 36);
     fillBlinkingText("<-- SCAN YOUR BADGE TO START", CANVAS_WIDTH/2, CANVAS_HEIGHT - 42, 500, '#FFFFFF', 36);
 }
+
+function hasValidBarcode()
+{
+    return (CheckBarCode(document.getElementById("barinput").value));
+} // function
+
 
 function animate() {
     var now = window.performance.now();
     var dt = now - lastTime;
     if (dt > 100) dt = 100;
-    if (wasKeyPressed(SHOOT_KEY) && !hasGameStarted) {
-        initGame();
-        hasGameStarted = true;
-    }
-
+    //if (wasKeyPressed(SHOOT_KEY) && !hasGameStarted) {
     if (hasGameStarted) {
         updateGame(dt / 1000);
-    }
-
+    } else if (hasValidBarcode()) {
+        initGame();
+        hasGameStarted = true;
+        gameCountdown = true;
+        sndAttract.pause();
+    } //if
 
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -716,7 +798,7 @@ function animate() {
         drawGame(false);
     } else {
         drawStartScreen();
-    }
+    } // if
     lastTime = now;
     requestAnimationFrame(animate);
 }
@@ -747,12 +829,12 @@ function resize() {
 }
 
 function onKeyDown(e) {
-    e.preventDefault();
+    if (hasGameStarted) e.preventDefault();
     keyStates[e.keyCode] = true;
 }
 
 function onKeyUp(e) {
-    e.preventDefault();
+    if (hasGameStarted) e.preventDefault();
     keyStates[e.keyCode] = false;
 }
 
@@ -762,6 +844,7 @@ function onKeyUp(e) {
 //
 // ###################################################################
 window.onload = function() {
+    sndAttract.play();
     init();
     animate();
 };
