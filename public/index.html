@@ -1,12 +1,16 @@
+<!DOCTYPE html>
 <html>
 <head>
     <link href="invaders.css" rel="stylesheet" type="text/css" />
-    <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css' />
+    <link href='playfont.css' rel='stylesheet' type='text/css' />
+    <script src="jquery-2.2.3.js" lang="javascript"></script>
+    <script src="jquery.color.plus-names-2.1.2.js" lang="javascript"></script>
     <script src="invaders.js" lang="javascript"></script>
     <script src="barcode.js" lang="javascript"></script>
 </head>
-<body style="background:#000;margin:0">
-    <canvas id="game-canvas" width="640" height="640"></canvas>
-    <textarea id="barinput"></textarea>
+<body style="background:#000;margin:0" onload="document.getElementById('barinput').focus()">
+    <canvas id="game-canvas" width="800" height="600" style="background-color:yellow"></canvas>
+    <textarea id="barinput" style="border:0;background:#999;height:200px"></textarea>
+    <div id="debug" style="color:white;">no debug info now</div>
 </body>
 </html>

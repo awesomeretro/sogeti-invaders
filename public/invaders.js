@@ -88,20 +88,26 @@ var IS_CHROME = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigato
 var CANVAS_WIDTH = 800;
 var CANVAS_HEIGHT = 600;
 //var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAACGUlEQVR42u3aSQ7CMBAEQIsn8P+/hiviAAK8zFIt5QbELiTHmfEYE3L9mZE9AAAAqAVwBQ8AAAD6THY5CgAAAKbfbPX3AQAAYBEEAADAuZrC6UUyfMEEAIBiAN8OePXnAQAAsLcmmKFPAQAAgHMbm+gbr3Sdo/LtcAAAANR6GywPAgBAM4D2JXAAABoBzBjA7AmlOx8AAEAzAOcDAADovTc4vQim6wUCABAYQG8QAADd4dPd2fRVYQAAANQG0B4HAABAawDnAwAA6AXgfAAAALpA2uMAAABwPgAAgPoAM9Ci/R4AAAD2dmqcEQIAIC/AiQGuAAYAAECcRS/a/cJXkUf2AAAAoBaA3iAAALrD+gIAAADY9baX/nwAAADNADwFAADo9YK0e5FMX/UFACA5QPSNEAAAAHKtCekmDAAAAADvBljtfgAAAGgMMGOrunvCy2uCAAAACFU6BwAAwF6AGQPa/XsAAADYB+B8AAAAtU+ItD4OAwAAAFVhAACaA0T7B44/BQAAANALwGMQAAAAADYO8If2+P31AgAAQN0SWbhFDwCAZlXgaO1xAAAA1FngnA8AACAeQPSNEAAAAM4CnC64AAAA4GzN4N9NSfgKEAAAAACszO26X8/X6BYAAAD0Anid8KcLAAAAAAAAAJBnwNEvAAAA9Jns1ygAAAAAAAAAAAAAAAAAAABAQ4COCENERERERERERBrnAa1sJuUVr3rsAAAAAElFTkSuQmCC';
-var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFxQo3wgFZQAAAtdJREFUeNrt3VtSwzAQRFGJygqy/zVmCYhvkhSO9RgJ6/Qv2Di33O2ZsYhy6qBSUmk5PueU0yR9pc0FAACbK48IteEX3TE0WQCA3TNgdb+PzgUWAGBz3Ub47ShXWo93BwAAgDpAHcACAIybBxxp9HM+ckjKAgDIgP6eH/377gAAAIjtBWa+vPx0PqAXYAEA6gDM9vfMWUB9M5TK0CFKTlkzBAAAACzUDQ4OvZmhyAIAyID1PB+ZCSwAwO4ZUOP3Zw+2ZkaP89XmAgsAIAPKNVaIyAAWACCsF5hdB+gFWACA2Dog8kVFTSapA1gAgL51QGtd0Nvj3guwAAAATA3BmsKkZ3PkDgAAAACWrgTHX6RKkAUAiMwAK0RYAIB9MsAKERYAQAZco6CRASwAwKh5wFGv0PvNkKEoCwCw9jzAKjEWAGCvXqC3R0dkjF6ABQCoAzB7FejMWUB1M/QSanaZkQEAAHCpbtAuMywAwD7doG+XZwEAdpZdZlgAAHWAOoAFADAPSD2fy72f83aYYAEAYjNg9k5SkbvOsAAAMqC9Dmj1pJ2mWAAAAJYOwVSelqnlwctqAv8eCwAAwO4hWN6swz0Knd4hdfZ8NdfsDgAAgHe6VXn07M8VQiwAwP+qAw6PevJkawb0OJ86gAUAiMuAJT+JDGABAKoyIKK2X8Tv7gAAAPgwAyb25+YBLADAgnVAnvwdAwOvhwUAAEAIKoRYAAAAhODUkDp5vlLK/eWD5PxwBwAAQFAhFH6VCiEWACA0A448P3uFiIkQCwDQLwOsEGEBAHbWLeQ539vfHa+HBQCQAWv159GZwwIAmAcM8GjNf35GZow7AAAAAGgKwVbq5f4rBL/zwy4zAAAAwHVD8Dn0jhQZiiwAAAAAAACAOqDtub26/qorWACA3TPgan4/mwssAAAAAAAAAAAAAAAAAAAAAMCO84CUrjcD/HQWQEREREREREREO+oHqKIhzFD4x3oAAAAASUVORK5CYII=';
+var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFxQo3wgFZQAAAtdJREFUeNrt3VtSwzAQRFGJygqy/zVmCYhvkhSO9RgJ6/Qv2Di33O2ZsYhy6qBSUmk5PueU0yR9pc0FAACbK48IteEX3TE0WQCA3TNgdb+PzgUWAGBz3Ub47ShXWo93BwAAgDpAHcACAIybBxxp9HM+ckjKAgDIgP6eH/377gAAAIjtBWa+vPx0PqAXYAEA6gDM9vfMWUB9M5TK0CFKTlkzBAAAACzUDQ4OvZmhyAIAyID1PB+ZCSwAwO4ZUOP3Zw+2ZkaP89XmAgsAIAPKNVaIyAAWACCsF5hdB+gFWACA2Dog8kVFTSapA1gAgL51QGtd0Nvj3guwAAAATA3BmsKkZ3PkDgAAAACWrgTHX6RKkAUAiMwAK0RYAIB9MsAKERYAQAZco6CRASwAwKh5wFGv0PvNkKEoCwCw9jzAKjEWAGCvXqC3R0dkjF6ABQCoAzB7FejMWUB1M/QSanaZkQEAAHCpbtAuMywAwD7doG+XZwEAdpZdZlgAAHWAOoAFADAPSD2fy72f83aYYAEAYjNg9k5SkbvOsAAAMqC9Dmj1pJ2mWAAAAJYOwVSelqnlwctqAv8eCwAAwO4hWN6swz0Knd4hdfZ8NdfsDgAAgHe6VXn07M8VQiwAwP+qAw6PevJkawb0OJ86gAUAiMuAJT+JDGABAKoyIKK2X8Tv7gAAAPgwAyb25+YBLADAgnVAnvwdAwOvhwUAAEAIKoRYAAAAhODUkDp5vlLK/eWD5PxwBwAAQFAhFH6VCiEWACA0A448P3uFiIkQCwDQLwOsEGEBAHbWLeQ539vfHa+HBQCQAWv159GZwwIAmAcM8GjNf35GZow7AAAAAGgKwVbq5f4rBL/zwy4zAAAAwHVD8Dn0jhQZiiwAAAAAAACAOqDtub26/qorWACA3TPgan4/mwssAAAAAAAAAAAAAAAAAAAAAMCO84CUrjcD/HQWQEREREREREREO+oHqKIhzFD4x3oAAAAASUVORK5CYII='; // unbranded
+var PLAYER_COLOUR = "green";
+var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQPBB4dxz38bgAAAyVJREFUeNrt3UF61DAQhFELhgtw/zNygfAhNrDAk8RjuVsS1uttMo7zu6rcLStx2QKq1q1e+XwpW9kG1Zdt8QIAgMWrZIRa+kkHhiYLALB6Bszu9+xcYAEAFq9Hht+OcuXq5ykAAAD0AfoAFgAgbz3gqLLv8z0XSVkAABkQ7/ns76cAAADoOwuMfHj56vqAWYAFAGgDMNrfI9cC2oehraYuopStGIYAAACAiabB5NAbGYosAIAMmM/zPTOBBQBYPQNa/L734NXMiDheay6wAAAyoN5jh4gMYAEAus0Co/sAswALANC3D+j5oKIlk/QBLABAbB9wtS+I9rjnAiwAAABDQ7ClMYkcjigAAAAAmLoTzD9JnSALANAzA+wQYQEA1skAO0RYAAAZcI+GRgawAABZ6wFHs0L0kyGLoiwAwNzrAXaJsQAAa80C0R7NyBizAAsA0AZg9C7QkWsBzcPQU6h5y4wMAACAW02D3jLDAgCsMw367/IsAMDK5S0zLACAPkAfwAIAWA/YIu/L0fd5b5hgAQD6ZsDoN0n1fOsMCwAgA673AVc96U1TLAAAAFOH4FZ329RK8raajj+PBQAAYPUQrO/swz0KneiQOnu8lnOmAAAAeK8eTR49+3WNEAsA8H/1AYef2nnyagZEHE8fwAIA9MuAKX8TGcACADRlQI/efhK/UwAAALyYAQPnc+sBLADAhH1AGfw/BhLPhwUAAEAIaoRYAAAAhODQkDp5vFrr96dfpJQfFAAAAJ0aoe5nqRFiAQC6ZsCR50fvELEixAIAxGWAHSIsAMDK9ehyn4/2d+D5sAAAMmCu+bx35rAAANYDEjza8pefPTOGAgAAAIC/cfOrvo35wY9v/wRh/flWKGAFBeyv/NMdsrMSKCBTAUdX+6WeK1kRFNCigIgrmzJFN6iFAj5SwKxXOVoZFLBXwJ2u/CtKMAyxwB8L3Fn6n9mBAurXrcoAAAAAAAAAANAJ6gSNw8ZhCohQwp50y7EijvHZlacAAA4scMYWH0ks+8nQ2fOhgKsKuKqULCXIgNEKGNU8RahieQUopZRSSimllFJqvfoNTPt6YBMPEqYAAAAASUVORK5CYII='; // branded
+var PLAYER_COLOUR = "red";
+var SOGETI_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAACEAQMAAAB2y8fiAAAABlBMVEX/AwD+//sAEuDvAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFzoiNNrlVwAAAQhJREFUaN7t2W0KgzAMBuCCB8iRcvUeqQcIONtoja64TSY18ubHWMt4KixNPwwB8YgYxnYILFiwulqBYD3AiiEwLO+WtJqwfFmbLrIW/+DC6mrJQSflYUSHTJUuJSBpIYjro8DqajX+XdpYU0zQMBXx3GTRZuLcpJj7YfW3YmuacrU0FaR81x+rVUeCdQsrteutrdE7q6QIw3Jlab1+s7QiwPJj5bRIxiqz/WROwOplUdSZbHKCz9ZoWFdan9badZO03zPBupV1uPed11p7hlmukNJ81Pn6DAPrWkuWU0r9HE7fDcHqZ41l0sqaIjzCcmmZaz76x70vrF6W2TnBcmzhvbtzC/GIeAFQw5FhLhmErgAAAABJRU5ErkJggg==";
 var LEFT_KEY = 37;
 var RIGHT_KEY = 39;
 var SHOOT_KEY = 88;
 var TEXT_BLINK_FREQ = 500;
-var PLAYER_CLIP_RECT = { x: 0, y: 204, w: 62, h: 32 };
+var PLAYER_CLIP_RECT = { x: 0, y: 204, w: 62, h: 36 };
 var ALIEN_BOTTOM_ROW = [ { x: 0, y: 0, w: 51, h: 34 }, { x: 0, y: 102, w: 51, h: 34 }];
 var ALIEN_MIDDLE_ROW = [ { x: 0, y: 137, w: 50, h: 33 }, { x: 0, y: 170, w: 50, h: 34 }];
 var ALIEN_TOP_ROW = [ { x: 0, y: 68, w: 50, h: 32 }, { x: 0, y: 34, w: 50, h: 32 }];
-var ALIEN_X_MARGIN = 42;
+var ALIEN_X_MARGIN = 40;
 var ALIEN_Y_TOP = 42;
 var ALIEN_SQUAD_WIDTH = 12 * ALIEN_X_MARGIN;
-var INIT_PLAYER_LIVES = 1;
-var INVADERS_TRIGGERHAPPY = 7; // higher is more bombs
+var INIT_PLAYER_LIVES = 3;
+var INVADERS_TRIGGERHAPPY = 10; // higher is more bombs
+var INVADERS_SPEEDUP_FACTOR = 5;
+var TIME_TO_WAIT_FOR_SCANNER_TO_FINISH = 5000;
 
 // ###################################################################
 // Utility functions & classes
@@ -182,9 +188,12 @@ var alienYDown = 0;
 var alienCount = 0;
 var wave = 1;
 var hasGameStarted = false;
-var hasDied = false;
+var nPlayerDiedTime = 0;
+var g_bWaitingForBarcode = false;
+var g_bPlayerIsDead = false;
+var g_nPauseGameUntilTime = 0;
 
-var nHighScore = document.cookie.replace(/(?:(?:^|.*;\s*)highscore\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+var nHighScore = localStorage.getItem("highscore") * 1;
 
 var sndInvaderStep1 = new Audio("sounds/invader-step1.wav");
 var sndInvaderStep2 = new Audio("sounds/invader-step2.wav");
@@ -280,20 +289,22 @@ var Player = SheetSprite.extend({
     },
 
     handleInput: function() {
-        if (isKeyDown(LEFT_KEY)) {
-            this.xVel = -175;
-        } else if (isKeyDown(RIGHT_KEY)) {
-            this.xVel = 175;
-        } else {
-            this.xVel = 0;
-        }
-
-        if (wasKeyPressed(SHOOT_KEY)) {
-            if (this.bulletDelayAccumulator > 0.5) {
-                this.shoot();
-                this.bulletDelayAccumulator = 0;
+        if (!g_bPlayerIsDead) {
+            if (isKeyDown(LEFT_KEY)) {
+                this.xVel = -175;
+            } else if (isKeyDown(RIGHT_KEY)) {
+                this.xVel = 175;
+            } else {
+                this.xVel = 0;
             }
-        }
+
+            if (wasKeyPressed(SHOOT_KEY)) {
+                if (this.bulletDelayAccumulator > 0.5) {
+                    this.shoot();
+                    this.bulletDelayAccumulator = 0;
+                }
+            }
+        } // if
     },
 
     updateBullets: function(dt) {
@@ -321,7 +332,7 @@ var Player = SheetSprite.extend({
     },
 
     draw: function(resized) {
-        this._super(resized);
+        if (!g_bPlayerIsDead) this._super(resized);
 
         // draw bullets
         for (var i = 0, len = this.bullets.length; i < len; i++) {
@@ -406,8 +417,8 @@ var Enemy = SheetSprite.extend({
                 updateAlienLogic = true;
             }
             if (this.position.y > CANVAS_HEIGHT - 80) {
-                playerDies();
-                reset();
+                playerIsHit();
+                theyInvaded();
             }
 
             var fireTest = Math.floor(Math.random() * (this.stepDelay + 1));
@@ -515,6 +526,9 @@ function initCanvas() {
     spriteSheetImg.src = SPRITE_SHEET_SRC;
     preDrawImages();
 
+    imgSogetiLogo = new Image();
+    imgSogetiLogo.src = SOGETI_LOGO;
+
     // add event listeners and initially resize
     window.addEventListener('resize', resize);
     document.addEventListener('keydown', onKeyDown);
@@ -565,11 +579,9 @@ function setupAlienFormation() {
     }
 }
 
-function reset() {
+function theyInvaded() {
     aliens = [];
     setupAlienFormation();
-    player.reset();
-    hasDied = false;
 }
 
 function init() {
@@ -580,6 +592,38 @@ function init() {
 }
 
 
+// ###################################################################
+// Event Listener functions
+//
+// ###################################################################
+function resize() {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    // calculate the scale factor to keep a correct aspect ratio
+    var scaleFactor = Math.min(w / CANVAS_WIDTH, h / CANVAS_HEIGHT);
+
+    if (IS_CHROME) {
+        canvas.width = CANVAS_WIDTH * scaleFactor;
+        canvas.height = CANVAS_HEIGHT * scaleFactor;
+        setImageSmoothing(false);
+        ctx.transform(scaleFactor, 0, 0, scaleFactor, 0, 0);
+    } else {
+        // resize the canvas css properties
+        canvas.style.width = CANVAS_WIDTH * scaleFactor + 'px';
+        canvas.style.height = CANVAS_HEIGHT * scaleFactor + 'px';
+    }
+}
+
+function onKeyDown(e) {
+    if (!g_bWaitingForBarcode) e.preventDefault();
+    keyStates[e.keyCode] = true;
+}
+
+function onKeyUp(e) {
+    if (!g_bWaitingForBarcode) e.preventDefault();
+    keyStates[e.keyCode] = false;
+}
 
 // ###################################################################
 // Helpful input functions
@@ -616,12 +660,13 @@ function updateAliens(dt) {
             alienCount--;
             if (alienCount < 1) {
                 wave++;
+                // TODO: Get READY FOR WAVE x
                 setupAlienFormation();
             }
             return;
         }
 
-        alien.stepDelay = ((alienCount * 20) - (wave * 10)) / 1000;
+        alien.stepDelay = (((alienCount * 20) - (wave * 10)) / 1000) / INVADERS_SPEEDUP_FACTOR;
         if (alien.stepDelay <= 0.05) {
             alien.stepDelay = 0.05;
         }
@@ -638,6 +683,16 @@ function updateAliens(dt) {
     }
     alienYDown = 0;
 }
+
+
+function removeAllPlayerBullets() {
+    var bullets = player.bullets;
+    for (var i= 0,len=bullets.length;i<len;i++) {
+        var bullet = bullets[i];
+        bullet.alive = false;
+    } // for
+} // function
+
 
 function resolveBulletEnemyCollisions() {
     var bullets = player.bullets;
@@ -681,50 +736,63 @@ function resolveBulletEnemyCollisions() {
     }
 }
 
+
+function removeAllInvaderBullets() {
+    for (var i= 0, len = aliens.length; i < len; i++) {
+        var alien = aliens[i];
+        if (alien.bullet !== null) alien.bullet.alive = false;
+    } // for
+} // function
+
 function resolveBulletPlayerCollisions() {
     for (var i = 0, len = aliens.length; i < len; i++) {
         var alien = aliens[i];
         if (alien.bullet !== null && checkRectCollision(alien.bullet.bounds, player.bounds)) {
-            if (player.lives === 0) {
-                if (player.score > nHighScore) {
-                    nHighScore = player.score;
-                    document.cookie = "highscore="+ nHighScore;
-                } // if
-                // show died-screen:
-                hasDied = true;
-                // TODO: store barcode in database
-                document.getElementById("barinput").value = "";
-                hasGameStarted = false;
-                sndAttract.play();
-            } else {
-                alien.bullet.alive = false;
-                playerDies();
-                break;
-            }
-
+            playerIsHit();
+            alien.bullet.alive = false;
+            break;
         }
     }
 }
 
-function playerDies() {
-    sndPlayerHit.play();
-    particleManager.createExplosion(player.position.x, player.position.y, 'green', 100, 8,8,6,0.001,40);
-    player.position.set(CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
-    player.lives--;
-    gameCountdown = true;
-}
+function playerIsHit() {
+    if (!g_bPlayerIsDead) {
+        sndPlayerHit.play();
+        particleManager.createExplosion(player.position.x, player.position.y, PLAYER_COLOUR, 100, 8, 8, 6, 0.001, 40);
+        player.lives--;
 
-function resolveCollisions() {
-    resolveBulletEnemyCollisions();
-    resolveBulletPlayerCollisions();
-}
+        removeAllInvaderBullets();
+        removeAllPlayerBullets();
+        if (player.lives > 0) {
+            player.position.set(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 70); // init the player's position
+            g_nPauseGameUntilTime = getNow() + 2000;
+        } else {
+            g_bPlayerIsDead = true;
+            // trigger died-screen:
+            if (nPlayerDiedTime == 0) nPlayerDiedTime = getNow();
+
+            // check for highscore and store in database
+            if (player.score >= nHighScore) {
+                nHighScore = player.score;
+                localStorage.setItem("highscore", nHighScore);
+                localStorage.setItem("highscore-by", g_aCurrentPerson);
+                g_aCurrentPerson.push("Highscore breaker! ("+ nHighScore +")");
+                localStorage.setItem("person-"+ g_aCurrentPerson[PERSON_ID], g_aCurrentPerson);
+            } // if
+        } // if
+    } // if
+} // function
+
 
 function updateGame(dt) {
-    player.handleInput();
-    prevKeyStates = keyStates.slice();
-    player.update(dt);
-    updateAliens(dt);
-    resolveCollisions();
+    if (g_nPauseGameUntilTime == 0) {
+        player.handleInput();
+        prevKeyStates = keyStates.slice();
+        player.update(dt);
+        updateAliens(dt);
+        resolveBulletEnemyCollisions();
+        resolveBulletPlayerCollisions();
+    } // if
 }
 
 function drawIntoCanvas(width, height, drawFunc) {
@@ -736,54 +804,52 @@ function drawIntoCanvas(width, height, drawFunc) {
     return canvas;
 }
 
-function fillText(text, x, y, color, fontSize) {
-    if (typeof color !== 'undefined') {
-        ctx.fillStyle = color;
+
+function rainbow(p_fSaturation = 0.9, p_fLightness = 0.6, p_fAlpha = 1) {
+    // 30 random hues with step of 12 degrees
+    var hue = Math.floor(Math.random() * 30) * 12;
+
+    return $.Color({
+        hue: hue,
+        saturation: p_fSaturation,
+        lightness: p_fLightness,
+        alpha: p_fAlpha
+    }).toHexString();
+};
+
+function printText(p_sText, p_nX, p_nY, p_sAlign = "center", p_nBlinkFreq = 0, p_sColor = "white", p_nFontSize = 14, p_bFillText = true)
+{
+    var x, y;
+    ctx.fillStyle = p_sColor;
+    ctx.font = p_nFontSize +"px Play";
+    switch (p_sAlign) {
+        case "left": x = p_nX; break;
+        case "center": x = p_nX - ctx.measureText(p_sText).width / 2; break;
+        case "right": x = p_nX - ctx.measureText(p_sText).width; break;
+    } // switch
+
+    if (p_nBlinkFreq > 0 && ~~(0.5 + Date.now() / p_nBlinkFreq) % 2) return;
+
+    if (p_bFillText) {
+        ctx.fillText(p_sText, x, p_nY);
     } else {
-        ctx.fillStyle = "white";
-    }
-    if (typeof fontSize !== 'undefined') ctx.font = fontSize + 'px Play';
-    ctx.fillText(text, x, y);
-}
+        ctx.strokeText(p_sText, x, p_nY);
+    } // if
+} // function
 
-function fillCenteredText(text, x, y, color, fontSize) {
-    var metrics = ctx.measureText(text);
-    fillText(text, x - metrics.width/2, y, color, fontSize);
-}
-
-function fillRightText(text, x, y, color, fontSize) {
-    var metrics = ctx.measureText(text);
-    fillText(text, x - metrics.width, y, color, fontSize);
-}
-
-function fillBlinkingText(text, x, y, blinkFreq, color, fontSize) {
-    if (~~(0.5 + Date.now() / blinkFreq) % 2) {
-        fillCenteredText(text, x, y, color, fontSize);
-    }
-}
-
-function fillRightBlinkingText(text, x, y, blinkFreq, color, fontSize) {
-    if (~~(0.5 + Date.now() / blinkFreq) % 2) {
-        fillRightText(text, x, y, color, fontSize);
-    }
-}
 
 function drawBottomHud() {
     ctx.fillStyle = '#02ff12';
     ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 2);
-    fillText("LIVES", 10, CANVAS_HEIGHT - 7.5, (player.lives >= 1 ? 'white' : 'red'), 20);
-    for (n = 0; n < player.lives; n++) {
-        ctx.drawImage(spriteSheetImg, player.clipRect.x, player.clipRect.y, player.clipRect.w,
-            player.clipRect.h, 75 + (42 * n), CANVAS_HEIGHT - 23, player.clipRect.w * 0.5,
-            player.clipRect.h * 0.5);
-    } // fore
-    fillRightText('PLAYER: <name>', CANVAS_WIDTH - 20, CANVAS_HEIGHT - 7.5);
-    if (player.score > nHighScore) {
-        fillRightBlinkingText('HIGHSCORE: '+ player.score, CANVAS_WIDTH - 20, 20, TEXT_BLINK_FREQ);
-    } else {
-        fillRightText('HIGHSCORE: '+ nHighScore, CANVAS_WIDTH - 20, 20);
-    } // if
-    fillText('SCORE: ' + player.score, 20, 20);
+    printText("LIVES: "+ player.lives, 10, CANVAS_HEIGHT - 7.5, "left", 0, (player.lives >= 1 ? 'white' : 'red'), 20);
+    //for (n = 0; n < player.lives; n++) {
+    //    ctx.drawImage(spriteSheetImg, player.clipRect.x, player.clipRect.y, player.clipRect.w,
+    //        player.clipRect.h, 75 + (42 * n), CANVAS_HEIGHT - 23, player.clipRect.w * 0.5,
+    //        player.clipRect.h * 0.5);
+    //} // for
+    printText('PLAYER: '+ g_aCurrentPerson[PERSON_FIRSTNAME], CANVAS_WIDTH - 20, CANVAS_HEIGHT - 7.5, "right", 0, "white", 20);
+    printText('HIGHSCORE: '+ nHighScore, CANVAS_WIDTH - 20, 20, "right", 0, "white", 20); // will start blinking faster & faster
+    printText('SCORE: ' + player.score, 20, 20, "left", 0, "white", 20);
 }
 
 function drawAliens(resized) {
@@ -798,94 +864,158 @@ function drawGame(resized) {
     drawAliens(resized);
     particleManager.draw();
     drawBottomHud();
-}
+    if (g_nPauseGameUntilTime > 0) {
+        printText("GET READY!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 42, "center", 100, "yellow", 42);
+    } // if
+} // function
 
 function drawStartScreen() {
-    fillCenteredText("Sogeti Space Invaders", CANVAS_WIDTH/2, CANVAS_HEIGHT/2.75, '#FFFFFF', 36);
-    fillBlinkingText("<-- SCAN YOUR BADGE TO START", CANVAS_WIDTH/2, CANVAS_HEIGHT - 42, 500, '#FFFFFF', 36);
-    fillRightText('CURRENT HIGHSCORE: '+ nHighScore, CANVAS_WIDTH - 20, 42, "grey", 18);
+    ctx.drawImage(imgSogetiLogo, CANVAS_WIDTH / 2 - (imgSogetiLogo.width / 4), 220, imgSogetiLogo.width / 2, imgSogetiLogo.height / 2);
+
+    printText("Space Invaders", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 42, "center", 0, "white", 36);
+    printText('Current highscore: '+ nHighScore, CANVAS_WIDTH/2, 42, "center", 0, "grey", 18);
+
+    if (isScanningBarcode()) {
+        if ((getNow() - g_nStartedScanningBarcodeTime) < (TIME_TO_WAIT_FOR_SCANNER_TO_FINISH * 0.75)) {
+            printText("SCANNING, PLEASE WAIT...", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 42, "center", 100, "cyan", 36);
+        } else {
+            printText("ERROR, PLEASE TRY AGAIN!", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 42, "center", 0, "red", 36);
+        }
+    } else {
+        printText("<-- SCAN YOUR BADGE TO START", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 42, "center", 500, '#FFFFFF', 36);
+    } // if
 }
 
 function drawDeadScreen() {
-    fillCenteredText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2.5, 'white', 42);
-    fillCenteredText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2.75, "white", 24);
-    if (player.score < nHighScore) {
-        fillCenteredText("Highscore: "+ nHighScore, CANVAS_WIDTH/2, CANVAS_HEIGHT/3, "#999", 24);
+    if (player.score == nHighScore) {
+        printText("CONGRATULATIONS!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 100, rainbow(1, 1), 42);
+        printText("YOU HAVE BEATEN THE HIGHSCORE!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 32, "center", 0, "white", 24);
     } else {
-        fillCenteredText("CONGRATULATIONS, YOU HAVE BEATEN THE HIGHSCORE!", CANVAS_WIDTH/2, CANVAS_HEIGHT/3, "#999", 24);
+        printText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 0, "white", 42);
+        printText("Highscore: "+ nHighScore, CANVAS_WIDTH/2, CANVAS_HEIGHT/2, "#999", 24);
+        printText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 88, "red", 24);
     } // if
+    printText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 42, "center", 0, "#999", 24);
 } // function
 
 function hasValidBarcode()
 {
-    return (CheckBarCode(document.getElementById("barinput").value));
+    return (checkBarCode(document.getElementById("barinput").value));
+} // function
+
+var g_nStartedScanningBarcodeTime = 0;
+
+function isScanningBarcode()
+{
+    sInput = document.getElementById("barinput").value;
+    document.getElementById("debug").innerHTML += "<br>sInput.length = "+ sInput.length;
+    if ((sInput.length > 0) && !isBarcodeComplete(sInput)) {
+        if (g_nStartedScanningBarcodeTime == 0) {
+            g_nStartedScanningBarcodeTime = getNow();
+        } // if
+        return true
+    } // if
+    return false;
+} // function
+
+function resetGame()
+{
+    nPlayerDiedTime = 0;
+    hasGameStarted = false;
+    g_bPlayerIsDead = false;
+    g_nPauseGameUntilTime = 0;
+    g_nStartedScanningBarcodeTime = 0;
+    g_bWaitingForBarcode = true;
+    document.getElementById("barinput").value = "";
+} // if
+
+
+function getNow()
+{
+    return parseInt(window.performance.now());
 } // function
 
 
 function animate() {
-    var now = window.performance.now();
-    var dt = now - lastTime;
+    var now = getNow();
+    var dt = parseInt(now - lastTime);
     if (dt > 100) dt = 100;
-    //if (wasKeyPressed(SHOOT_KEY) && !hasGameStarted) {
+
+    // DEBUG INFO:
+    document.getElementById("debug").innerHTML = "now = "+ now +"<br>dt = "+ dt +"<br>nPlayerDiedTime = "+ nPlayerDiedTime
+        +"<br>g_nStartedScanning... = "+ g_nStartedScanningBarcodeTime +"<br>scanning? = "+ (isScanningBarcode() ? "yes":"no")
+        +"<br>hasGameStarted = "+ (hasGameStarted ? "yes":"no") +"<br>g_bWaitingForBarcode = "+ (g_bWaitingForBarcode ? "yes":"no")
+        +"<br>LIVES = "+ (player ? player.lives : "N/A") +"<br>Score = "+ (player ? player.score : "N/A") +"<br>Highscore = "+ nHighScore
+        +"<br>g_bPlayerIsDead = "+ (g_bPlayerIsDead ? "yes":"no");
+
+    if (g_nPauseGameUntilTime > 0) document.getElementById("debug").innerHTML += "<br><b>GET READY!</b>";
+
+    // Do we need to stop pausing?
+    if ((g_nPauseGameUntilTime > 0) && (getNow() > g_nPauseGameUntilTime)) {
+        g_nPauseGameUntilTime = 0;
+    } // if
+
     if (hasGameStarted) {
-        updateGame(dt / 1000);
-    } else if (hasDied) {
-        if (wasKeyPressed(SHOOT_KEY)) hasDied = false;
-        hasGameStarted = false;
-    } else if (hasValidBarcode()) {
-        initGame();
-        hasGameStarted = true;
-        gameCountdown = true;
-        sndAttract.pause();
+        if (!g_bPlayerIsDead) {
+            updateGame(dt / 1000); // normal operation
+        } else {
+            if (now - nPlayerDiedTime < 2000) { // wait for the player explosion animation to finish
+                updateAliens(dt / 1000); // only update the aliens
+            } else {
+                document.getElementById("debug").innerHTML += "<br>STOPPING THE GAME";
+                hasGameStarted = false; // stop the game
+                if (now - nPlayerDiedTime > 5000) { // wait for 5 seconds before accepting FIRE to continue
+                    document.getElementById("debug").innerHTML += "<br>CHECKING FOR SHOOT_KEY ("+ (wasKeyPressed(SHOOT_KEY) ? "YES":"no");
+                    if (wasKeyPressed(SHOOT_KEY)) {
+                        resetGame();
+                    }
+                } else if (now - nPlayerDiedTime > 10000) { // wait for 30 seconds before continuing automatically
+                    resetGame();
+                } // if
+            } // if
+        } // if
+    } else {
+        // wait for no more than 10 seconds for a barcode to scan completely
+        if ((g_nStartedScanningBarcodeTime > 0) && (now - g_nStartedScanningBarcodeTime > TIME_TO_WAIT_FOR_SCANNER_TO_FINISH)) {
+            document.getElementById("barinput").value = ""; // ja, doeiiii!
+            g_nStartedScanningBarcodeTime = 0;
+        } // if
+
+        // check if a valid barcode has been entered, so we can start to play!!! \o/
+        if (hasValidBarcode()) {
+            initGame();
+            hasGameStarted = true;
+            g_bWaitingForBarcode = false;
+            g_bPlayerIsDead = false;
+            g_nPauseGameUntilTime = getNow() + 2000; // "get ready!"
+            sndAttract.pause();
+            sndAttract.currentTime = 0; // be kind, rewind!
+        }
     } //if
 
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    if (g_bPlayerIsDead && (now - nPlayerDiedTime > 2000)) {
+        drawDeadScreen();
+        hasGameStarted = false;
+    } // if
     if (hasGameStarted) {
         drawGame(false);
-    } else if (hasDied) {
-        drawDeadScreen();
     } else {
         drawStartScreen();
     } // if
+
+    if (g_bPlayerIsDead) {
+        printText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 0, "white", 42);
+    } // if
+
     lastTime = now;
     requestAnimationFrame(animate);
 }
 
 
 
-// ###################################################################
-// Event Listener functions
-//
-// ###################################################################
-function resize() {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-
-    // calculate the scale factor to keep a correct aspect ratio
-    var scaleFactor = Math.min(w / CANVAS_WIDTH, h / CANVAS_HEIGHT);
-
-    if (IS_CHROME) {
-        canvas.width = CANVAS_WIDTH * scaleFactor;
-        canvas.height = CANVAS_HEIGHT * scaleFactor;
-        setImageSmoothing(false);
-        ctx.transform(scaleFactor, 0, 0, scaleFactor, 0, 0);
-    } else {
-        // resize the canvas css properties
-        canvas.style.width = CANVAS_WIDTH * scaleFactor + 'px';
-        canvas.style.height = CANVAS_HEIGHT * scaleFactor + 'px';
-    }
-}
-
-function onKeyDown(e) {
-    if (hasGameStarted) e.preventDefault();
-    keyStates[e.keyCode] = true;
-}
-
-function onKeyUp(e) {
-    if (hasGameStarted) e.preventDefault();
-    keyStates[e.keyCode] = false;
-}
 
 
 // ###################################################################
@@ -895,5 +1025,6 @@ function onKeyUp(e) {
 window.onload = function() {
     sndAttract.play();
     init();
+    resetGame();
     animate();
 };

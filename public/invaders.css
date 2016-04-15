@@ -1,5 +1,5 @@
 body, html{
-    background-color: #EEEEEE;
+    background-color: #000;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -17,5 +17,5 @@ canvas {
     image-rendering: optimizeSpeed;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
-    image-rendering: optimize-contrast
+    image-rendering: optimize-contrast;
 }
