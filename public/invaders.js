@@ -104,10 +104,12 @@ var ALIEN_TOP_ROW = [ { x: 0, y: 68, w: 50, h: 32 }, { x: 0, y: 34, w: 50, h: 32
 var ALIEN_X_MARGIN = 40;
 var ALIEN_Y_TOP = 42;
 var ALIEN_SQUAD_WIDTH = 12 * ALIEN_X_MARGIN;
+var TIME_TO_WAIT_FOR_SCANNER_TO_FINISH = 5000;
+
+// TODO: change to 'sane' non-debugging values:
 var INIT_PLAYER_LIVES = 3;
 var INVADERS_TRIGGERHAPPY = 10; // higher is more bombs
 var INVADERS_SPEEDUP_FACTOR = 5;
-var TIME_TO_WAIT_FOR_SCANNER_TO_FINISH = 5000;
 
 // ###################################################################
 // Utility functions & classes
@@ -660,7 +662,7 @@ function updateAliens(dt) {
             alienCount--;
             if (alienCount < 1) {
                 wave++;
-                // TODO: Get READY FOR WAVE x
+                g_nPauseGameUntilTime = getNow() + 2000;
                 setupAlienFormation();
             }
             return;
@@ -865,7 +867,7 @@ function drawGame(resized) {
     particleManager.draw();
     drawBottomHud();
     if (g_nPauseGameUntilTime > 0) {
-        printText("GET READY!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 42, "center", 100, "yellow", 42);
+        printText("GET READY FOR WAVE "+ wave +"!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 42, "center", 100, "yellow", 42);
     } // if
 } // function
 
@@ -941,6 +943,9 @@ function animate() {
     var dt = parseInt(now - lastTime);
     if (dt > 100) dt = 100;
 
+    // TODO: remove debug info
+    // TODO: hide scanner box
+
     // DEBUG INFO:
     document.getElementById("debug").innerHTML = "now = "+ now +"<br>dt = "+ dt +"<br>nPlayerDiedTime = "+ nPlayerDiedTime
         +"<br>g_nStartedScanning... = "+ g_nStartedScanningBarcodeTime +"<br>scanning? = "+ (isScanningBarcode() ? "yes":"no")
@@ -954,7 +959,7 @@ function animate() {
     if ((g_nPauseGameUntilTime > 0) && (getNow() > g_nPauseGameUntilTime)) {
         g_nPauseGameUntilTime = 0;
     } // if
-
+// TODO: ombouwen naar state-machine
     if (hasGameStarted) {
         if (!g_bPlayerIsDead) {
             updateGame(dt / 1000); // normal operation
@@ -999,8 +1004,7 @@ function animate() {
     if (g_bPlayerIsDead && (now - nPlayerDiedTime > 2000)) {
         drawDeadScreen();
         hasGameStarted = false;
-    } // if
-    if (hasGameStarted) {
+    } else if (hasGameStarted) {
         drawGame(false);
     } else {
         drawStartScreen();

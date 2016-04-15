@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="invaders.css" rel="stylesheet" type="text/css" />
+    <link href='playfont.css' rel='stylesheet' type='text/css' />
+</head>
+<body>
+    <div id="data" style="font-family: Play; font-size:12px; color:white;"></div>
+    <script>
+        function listStorage() {
+            for(var i = 0; i < localStorage.length; i++)    //******* length
+            {
+                var key = localStorage.key(i);              //******* key()
+                var value = localStorage.getItem(key);  //******* getItem()
+                document.getElementById("data").innerHTML += "<li>"+ key +"="+ value +"</li>";
+                console.log(key,value);
+            } // for
+        } // function
+
+        listStorage();
+    </script>
+</body>
+</html>
