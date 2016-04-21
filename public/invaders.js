@@ -88,28 +88,76 @@ var IS_CHROME = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigato
 var CANVAS_WIDTH = 800;
 var CANVAS_HEIGHT = 600;
 //var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAACGUlEQVR42u3aSQ7CMBAEQIsn8P+/hiviAAK8zFIt5QbELiTHmfEYE3L9mZE9AAAAqAVwBQ8AAAD6THY5CgAAAKbfbPX3AQAAYBEEAADAuZrC6UUyfMEEAIBiAN8OePXnAQAAsLcmmKFPAQAAgHMbm+gbr3Sdo/LtcAAAANR6GywPAgBAM4D2JXAAABoBzBjA7AmlOx8AAEAzAOcDAADovTc4vQim6wUCABAYQG8QAADd4dPd2fRVYQAAANQG0B4HAABAawDnAwAA6AXgfAAAALpA2uMAAABwPgAAgPoAM9Ci/R4AAAD2dmqcEQIAIC/AiQGuAAYAAECcRS/a/cJXkUf2AAAAoBaA3iAAALrD+gIAAADY9baX/nwAAADNADwFAADo9YK0e5FMX/UFACA5QPSNEAAAAHKtCekmDAAAAADvBljtfgAAAGgMMGOrunvCy2uCAAAACFU6BwAAwF6AGQPa/XsAAADYB+B8AAAAtU+ItD4OAwAAAFVhAACaA0T7B44/BQAAANALwGMQAAAAADYO8If2+P31AgAAQN0SWbhFDwCAZlXgaO1xAAAA1FngnA8AACAeQPSNEAAAAM4CnC64AAAA4GzN4N9NSfgKEAAAAACszO26X8/X6BYAAAD0Anid8KcLAAAAAAAAAJBnwNEvAAAA9Jns1ygAAAAAAAAAAAAAAAAAAABAQ4COCENERERERERERBrnAa1sJuUVr3rsAAAAAElFTkSuQmCC';
-var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFxQo3wgFZQAAAtdJREFUeNrt3VtSwzAQRFGJygqy/zVmCYhvkhSO9RgJ6/Qv2Di33O2ZsYhy6qBSUmk5PueU0yR9pc0FAACbK48IteEX3TE0WQCA3TNgdb+PzgUWAGBz3Ub47ShXWo93BwAAgDpAHcACAIybBxxp9HM+ckjKAgDIgP6eH/377gAAAIjtBWa+vPx0PqAXYAEA6gDM9vfMWUB9M5TK0CFKTlkzBAAAACzUDQ4OvZmhyAIAyID1PB+ZCSwAwO4ZUOP3Zw+2ZkaP89XmAgsAIAPKNVaIyAAWACCsF5hdB+gFWACA2Dog8kVFTSapA1gAgL51QGtd0Nvj3guwAAAATA3BmsKkZ3PkDgAAAACWrgTHX6RKkAUAiMwAK0RYAIB9MsAKERYAQAZco6CRASwAwKh5wFGv0PvNkKEoCwCw9jzAKjEWAGCvXqC3R0dkjF6ABQCoAzB7FejMWUB1M/QSanaZkQEAAHCpbtAuMywAwD7doG+XZwEAdpZdZlgAAHWAOoAFADAPSD2fy72f83aYYAEAYjNg9k5SkbvOsAAAMqC9Dmj1pJ2mWAAAAJYOwVSelqnlwctqAv8eCwAAwO4hWN6swz0Knd4hdfZ8NdfsDgAAgHe6VXn07M8VQiwAwP+qAw6PevJkawb0OJ86gAUAiMuAJT+JDGABAKoyIKK2X8Tv7gAAAPgwAyb25+YBLADAgnVAnvwdAwOvhwUAAEAIKoRYAAAAhODUkDp5vlLK/eWD5PxwBwAAQFAhFH6VCiEWACA0A448P3uFiIkQCwDQLwOsEGEBAHbWLeQ539vfHa+HBQCQAWv159GZwwIAmAcM8GjNf35GZow7AAAAAGgKwVbq5f4rBL/zwy4zAAAAwHVD8Dn0jhQZiiwAAAAAAACAOqDtub26/qorWACA3TPgan4/mwssAAAAAAAAAAAAAAAAAAAAAMCO84CUrjcD/HQWQEREREREREREO+oHqKIhzFD4x3oAAAAASUVORK5CYII='; // unbranded
-var PLAYER_COLOUR = "green";
-var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQPBB4dxz38bgAAAyVJREFUeNrt3UF61DAQhFELhgtw/zNygfAhNrDAk8RjuVsS1uttMo7zu6rcLStx2QKq1q1e+XwpW9kG1Zdt8QIAgMWrZIRa+kkHhiYLALB6Bszu9+xcYAEAFq9Hht+OcuXq5ykAAAD0AfoAFgAgbz3gqLLv8z0XSVkAABkQ7/ns76cAAADoOwuMfHj56vqAWYAFAGgDMNrfI9cC2oehraYuopStGIYAAACAiabB5NAbGYosAIAMmM/zPTOBBQBYPQNa/L734NXMiDheay6wAAAyoN5jh4gMYAEAus0Co/sAswALANC3D+j5oKIlk/QBLABAbB9wtS+I9rjnAiwAAABDQ7ClMYkcjigAAAAAmLoTzD9JnSALANAzA+wQYQEA1skAO0RYAAAZcI+GRgawAABZ6wFHs0L0kyGLoiwAwNzrAXaJsQAAa80C0R7NyBizAAsA0AZg9C7QkWsBzcPQU6h5y4wMAACAW02D3jLDAgCsMw367/IsAMDK5S0zLACAPkAfwAIAWA/YIu/L0fd5b5hgAQD6ZsDoN0n1fOsMCwAgA673AVc96U1TLAAAAFOH4FZ329RK8raajj+PBQAAYPUQrO/swz0KneiQOnu8lnOmAAAAeK8eTR49+3WNEAsA8H/1AYef2nnyagZEHE8fwAIA9MuAKX8TGcACADRlQI/efhK/UwAAALyYAQPnc+sBLADAhH1AGfw/BhLPhwUAAEAIaoRYAAAAhODQkDp5vFrr96dfpJQfFAAAAJ0aoe5nqRFiAQC6ZsCR50fvELEixAIAxGWAHSIsAMDK9ehyn4/2d+D5sAAAMmCu+bx35rAAANYDEjza8pefPTOGAgAAAIC/cfOrvo35wY9v/wRh/flWKGAFBeyv/NMdsrMSKCBTAUdX+6WeK1kRFNCigIgrmzJFN6iFAj5SwKxXOVoZFLBXwJ2u/CtKMAyxwB8L3Fn6n9mBAurXrcoAAAAAAAAAANAJ6gSNw8ZhCohQwp50y7EijvHZlacAAA4scMYWH0ks+8nQ2fOhgKsKuKqULCXIgNEKGNU8RahieQUopZRSSimllFJqvfoNTPt6YBMPEqYAAAAASUVORK5CYII='; // branded
-var PLAYER_COLOUR = "red";
+//var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFxQo3wgFZQAAAtdJREFUeNrt3VtSwzAQRFGJygqy/zVmCYhvkhSO9RgJ6/Qv2Di33O2ZsYhy6qBSUmk5PueU0yR9pc0FAACbK48IteEX3TE0WQCA3TNgdb+PzgUWAGBz3Ub47ShXWo93BwAAgDpAHcACAIybBxxp9HM+ckjKAgDIgP6eH/377gAAAIjtBWa+vPx0PqAXYAEA6gDM9vfMWUB9M5TK0CFKTlkzBAAAACzUDQ4OvZmhyAIAyID1PB+ZCSwAwO4ZUOP3Zw+2ZkaP89XmAgsAIAPKNVaIyAAWACCsF5hdB+gFWACA2Dog8kVFTSapA1gAgL51QGtd0Nvj3guwAAAATA3BmsKkZ3PkDgAAAACWrgTHX6RKkAUAiMwAK0RYAIB9MsAKERYAQAZco6CRASwAwKh5wFGv0PvNkKEoCwCw9jzAKjEWAGCvXqC3R0dkjF6ABQCoAzB7FejMWUB1M/QSanaZkQEAAHCpbtAuMywAwD7doG+XZwEAdpZdZlgAAHWAOoAFADAPSD2fy72f83aYYAEAYjNg9k5SkbvOsAAAMqC9Dmj1pJ2mWAAAAJYOwVSelqnlwctqAv8eCwAAwO4hWN6swz0Knd4hdfZ8NdfsDgAAgHe6VXn07M8VQiwAwP+qAw6PevJkawb0OJ86gAUAiMuAJT+JDGABAKoyIKK2X8Tv7gAAAPgwAyb25+YBLADAgnVAnvwdAwOvhwUAAEAIKoRYAAAAhODUkDp5vlLK/eWD5PxwBwAAQFAhFH6VCiEWACA0A448P3uFiIkQCwDQLwOsEGEBAHbWLeQ539vfHa+HBQCQAWv159GZwwIAmAcM8GjNf35GZow7AAAAAGgKwVbq5f4rBL/zwy4zAAAAwHVD8Dn0jhQZiiwAAAAAAACAOqDtub26/qorWACA3TPgan4/mwssAAAAAAAAAAAAAAAAAAAAAMCO84CUrjcD/HQWQEREREREREREO+oHqKIhzFD4x3oAAAAASUVORK5CYII='; // unbranded
+//var PLAYER_COLOUR = "green";
+//var SPRITE_SHEET_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAEACAYAAAADRnAGAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQPBB4dxz38bgAAAyVJREFUeNrt3UF61DAQhFELhgtw/zNygfAhNrDAk8RjuVsS1uttMo7zu6rcLStx2QKq1q1e+XwpW9kG1Zdt8QIAgMWrZIRa+kkHhiYLALB6Bszu9+xcYAEAFq9Hht+OcuXq5ykAAAD0AfoAFgAgbz3gqLLv8z0XSVkAABkQ7/ns76cAAADoOwuMfHj56vqAWYAFAGgDMNrfI9cC2oehraYuopStGIYAAACAiabB5NAbGYosAIAMmM/zPTOBBQBYPQNa/L734NXMiDheay6wAAAyoN5jh4gMYAEAus0Co/sAswALANC3D+j5oKIlk/QBLABAbB9wtS+I9rjnAiwAAABDQ7ClMYkcjigAAAAAmLoTzD9JnSALANAzA+wQYQEA1skAO0RYAAAZcI+GRgawAABZ6wFHs0L0kyGLoiwAwNzrAXaJsQAAa80C0R7NyBizAAsA0AZg9C7QkWsBzcPQU6h5y4wMAACAW02D3jLDAgCsMw367/IsAMDK5S0zLACAPkAfwAIAWA/YIu/L0fd5b5hgAQD6ZsDoN0n1fOsMCwAgA673AVc96U1TLAAAAFOH4FZ329RK8raajj+PBQAAYPUQrO/swz0KneiQOnu8lnOmAAAAeK8eTR49+3WNEAsA8H/1AYef2nnyagZEHE8fwAIA9MuAKX8TGcACADRlQI/efhK/UwAAALyYAQPnc+sBLADAhH1AGfw/BhLPhwUAAEAIaoRYAAAAhODQkDp5vFrr96dfpJQfFAAAAJ0aoe5nqRFiAQC6ZsCR50fvELEixAIAxGWAHSIsAMDK9ehyn4/2d+D5sAAAMmCu+bx35rAAANYDEjza8pefPTOGAgAAAIC/cfOrvo35wY9v/wRh/flWKGAFBeyv/NMdsrMSKCBTAUdX+6WeK1kRFNCigIgrmzJFN6iFAj5SwKxXOVoZFLBXwJ2u/CtKMAyxwB8L3Fn6n9mBAurXrcoAAAAAAAAAANAJ6gSNw8ZhCohQwp50y7EijvHZlacAAA4scMYWH0ks+8nQ2fOhgKsKuKqULCXIgNEKGNU8RahieQUopZRSSimllFJqvfoNTPt6YBMPEqYAAAAASUVORK5CYII='; // branded
+//var PLAYER_COLOUR = "red";
+var SPRITE_SHEET_SRC = 'sprites.png';
+var SPRITE_SCALE = 2; // scaling factor (sprites get magnified this many times)
+
+var PLAYER_COLOUR = "green"; // for the player explosion
 var SOGETI_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAACEAQMAAAB2y8fiAAAABlBMVEX/AwD+//sAEuDvAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQNFzoiNNrlVwAAAQhJREFUaN7t2W0KgzAMBuCCB8iRcvUeqQcIONtoja64TSY18ubHWMt4KixNPwwB8YgYxnYILFiwulqBYD3AiiEwLO+WtJqwfFmbLrIW/+DC6mrJQSflYUSHTJUuJSBpIYjro8DqajX+XdpYU0zQMBXx3GTRZuLcpJj7YfW3YmuacrU0FaR81x+rVUeCdQsrteutrdE7q6QIw3Jlab1+s7QiwPJj5bRIxiqz/WROwOplUdSZbHKCz9ZoWFdan9badZO03zPBupV1uPed11p7hlmukNJ81Pn6DAPrWkuWU0r9HE7fDcHqZ41l0sqaIjzCcmmZaz76x70vrF6W2TnBcmzhvbtzC/GIeAFQw5FhLhmErgAAAABJRU5ErkJggg==";
 var LEFT_KEY = 37;
 var RIGHT_KEY = 39;
 var SHOOT_KEY = 88;
+
+
+var ACTORS = {
+    "ALIEN_SMALL": {
+        "SCORE_VALUE": 30,
+        "COLOUR": "magenta",
+        "CLIPRECTS": [{x:0, y:32, w:8, h:8}, {x:8, y:32, w:8, h:8}]
+    },
+    "ALIEN_MEDIUM": {
+        "SCORE_VALUE": 20,
+        "COLOUR": "cyan",
+        "CLIPRECTS": [{x:0, y:0, w:11, h:8}, {x:0, y:8, w:11, h:8}]
+    },
+    "ALIEN_LARGE": {
+        "SCORE_VALUE": 10,
+        "COLOUR": "yellow",
+        "CLIPRECTS": [{x:0, y:16, w:12, h:8}, {x:0, y:24, w:12, h:8}]
+    },
+    "ALIEN_UFO": {
+        "SCORE_VALUE": function() {
+            return getRandomInt(1,3) * 50; // either 50, 100, or 150 points
+        }, // function
+        "COLOUR": "red",
+        "CLIPRECTS": [{x:0, y:56, w:16, h:7}, {x:0, y:63, w:16, h:7}, {x:0, y:70, w:16, h:7}]
+    },
+    "PLAYER": {
+        "COLOUR": "green",
+        "CLIPRECTS": [{x:0, y:40, w:13, h:8}, {x:0, y:48, w:13, h:8}]
+    }
+} // var
+
+
 var TEXT_BLINK_FREQ = 500;
-var PLAYER_CLIP_RECT = { x: 0, y: 204, w: 62, h: 36 };
-var ALIEN_BOTTOM_ROW = [ { x: 0, y: 0, w: 51, h: 34 }, { x: 0, y: 102, w: 51, h: 34 }];
-var ALIEN_MIDDLE_ROW = [ { x: 0, y: 137, w: 50, h: 33 }, { x: 0, y: 170, w: 50, h: 34 }];
-var ALIEN_TOP_ROW = [ { x: 0, y: 68, w: 50, h: 32 }, { x: 0, y: 34, w: 50, h: 32 }];
 var ALIEN_X_MARGIN = 40;
 var ALIEN_Y_TOP = 42;
 var ALIEN_SQUAD_WIDTH = 12 * ALIEN_X_MARGIN;
 var TIME_TO_WAIT_FOR_SCANNER_TO_FINISH = 5000;
 
-// TODO: change to 'sane' non-debugging values:
+// difficulty settings:
 var INIT_PLAYER_LIVES = 3;
-var INVADERS_TRIGGERHAPPY = 10; // higher is more bombs
-var INVADERS_SPEEDUP_FACTOR = 5;
+var INVADERS_TRIGGERHAPPY = 5; // higher is more bombs
+var INVADERS_SPEEDUP_FACTOR = 1.5;
+
+
+// MACHINE STATES:
+var STATE_INIT = 0;
+var STATE_ATTRACT = 11;
+var STATE_SCANNING = 12;
+var STATE_GET_READY = 21;
+var STATE_GET_READY_WAVE = 22;
+var STATE_PLAYER_FATALLY_HIT = 31;
+var STATE_RIGHT_AFTER_DEATH = 32;
+var STATE_AFTER_DEATH = 33;
+var STATE_GET_PLAYING = 41;
+var STATE_PLAYING = 42;
+
+var g_nCurrentState = STATE_INIT;
+
 
 // ###################################################################
 // Utility functions & classes
@@ -168,6 +216,10 @@ var Rect = Class.extend({
     }
 });
 
+function getClipRects(p_actorType)
+{
+    return ACTORS[p_actorType].CLIPRECTS;
+} // function
 
 
 // ###################################################################
@@ -189,13 +241,11 @@ var alienDirection = -1;
 var alienYDown = 0;
 var alienCount = 0;
 var wave = 1;
-var hasGameStarted = false;
 var nPlayerDiedTime = 0;
-var g_bWaitingForBarcode = false;
-var g_bPlayerIsDead = false;
 var g_nPauseGameUntilTime = 0;
 
 var nHighScore = localStorage.getItem("highscore") * 1;
+var nOldHighScore = nHighScore;
 
 var sndInvaderStep1 = new Audio("sounds/invader-step1.wav");
 var sndInvaderStep2 = new Audio("sounds/invader-step2.wav");
@@ -246,6 +296,10 @@ var SheetSprite = BaseSprite.extend({
         this.bounds.set(x, y, this.clipRect.w, this.clipRect.h);
     },
 
+    getExplosionColour: function() {
+        return ACTORS[this.type].COLOUR;
+    },
+
     update: function(dt) {},
 
     _updateBounds: function() {
@@ -269,13 +323,14 @@ var SheetSprite = BaseSprite.extend({
 
 var Player = SheetSprite.extend({
     init: function() {
-        this._super(spriteSheetImg, PLAYER_CLIP_RECT, CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
-        this.scale.set(0.75, 0.75);
+        this._super(spriteSheetImg, getClipRects("PLAYER")[0], CANVAS_WIDTH/2, CANVAS_HEIGHT - 70);
+        this.scale.set(SPRITE_SCALE, SPRITE_SCALE);
         this.lives = INIT_PLAYER_LIVES;
         this.xVel = 0;
         this.bullets = [];
         this.bulletDelayAccumulator = 0;
         this.score = 0;
+        this.type = "PLAYER";
     },
 
     reset: function() {
@@ -291,7 +346,7 @@ var Player = SheetSprite.extend({
     },
 
     handleInput: function() {
-        if (!g_bPlayerIsDead) {
+        if (getState() != STATE_PLAYER_FATALLY_HIT) {
             if (isKeyDown(LEFT_KEY)) {
                 this.xVel = -175;
             } else if (isKeyDown(RIGHT_KEY)) {
@@ -334,7 +389,7 @@ var Player = SheetSprite.extend({
     },
 
     draw: function(resized) {
-        if (!g_bPlayerIsDead) this._super(resized);
+        if (getState() != STATE_PLAYER_FATALLY_HIT) this._super(resized);
 
         // draw bullets
         for (var i = 0, len = this.bullets.length; i < len; i++) {
@@ -368,16 +423,26 @@ var Bullet = BaseSprite.extend({
 });
 
 var Enemy = SheetSprite.extend({
-    init: function(clipRects, x, y) {
+    init: function(alienType, x, y) {
+        var clipRects = getClipRects(alienType);
         this._super(spriteSheetImg, clipRects[0], x, y);
         this.clipRects = clipRects;
-        this.scale.set(0.5, 0.5);
+        this.scale.set(SPRITE_SCALE, SPRITE_SCALE);
         this.alive = true;
         this.onFirstState = true;
         this.stepDelay = 1; // try 2 secs to start with...
         this.stepAccumulator = 0;
         this.doShoot = false;
         this.bullet = null;
+        this.type = alienType;
+    },
+
+    getScoreValue: function() {
+        var nScoreValue = ACTORS[this.type].SCORE_VALUE;
+        if (typeof nScoreValue == "function") {
+            nScoreValue = nScoreValue();
+        } // if
+        return nScoreValue;
     },
 
     toggleFrame: function() {
@@ -424,7 +489,7 @@ var Enemy = SheetSprite.extend({
             }
 
             var fireTest = Math.floor(Math.random() * (this.stepDelay + 1));
-            if (getRandomArbitrary(0, 1000) <= INVADERS_TRIGGERHAPPY * (this.stepDelay + 1)) {
+            if (getRandomArbitrary(0, 1000) <= (INVADERS_TRIGGERHAPPY + wave) * (this.stepDelay + 1)) {
                 this.doShoot = true;
             }
             this.position.x += 10 * alienDirection;
@@ -568,31 +633,18 @@ function setupAlienFormation() {
     for (var i = 0, len = 5 * 12; i < len; i++) {
         var gridX = (i % 12);
         var gridY = Math.floor(i / 12);
-        var clipRects;
+        var alienType;
         switch (gridY) {
             case 0:
-            case 1: clipRects = ALIEN_BOTTOM_ROW; break;
+            case 1: alienType = "ALIEN_LARGE"; break;
             case 2:
-            case 3: clipRects = ALIEN_MIDDLE_ROW; break;
-            case 4: clipRects = ALIEN_TOP_ROW; break;
+            case 3: alienType = "ALIEN_MEDIUM"; break;
+            case 4: alienType = "ALIEN_SMALL"; break;
         }
-        aliens.push(new Enemy(clipRects, (CANVAS_WIDTH/2 - ALIEN_SQUAD_WIDTH/2) + ALIEN_X_MARGIN/2 + gridX * ALIEN_X_MARGIN, CANVAS_HEIGHT/3.25 - gridY * 40 + ALIEN_Y_TOP));
+        aliens.push(new Enemy(alienType, (CANVAS_WIDTH/2 - ALIEN_SQUAD_WIDTH/2) + ALIEN_X_MARGIN/2 + gridX * ALIEN_X_MARGIN, CANVAS_HEIGHT/3.25 - gridY * 40 + ALIEN_Y_TOP));
         alienCount++;
     }
 }
-
-function theyInvaded() {
-    aliens = [];
-    setupAlienFormation();
-}
-
-function init() {
-    initCanvas();
-    keyStates = [];
-    prevKeyStates = [];
-    resize();
-}
-
 
 // ###################################################################
 // Event Listener functions
@@ -618,14 +670,27 @@ function resize() {
 }
 
 function onKeyDown(e) {
-    if (!g_bWaitingForBarcode) e.preventDefault();
+    if (!fullKeyboardEnabled()) e.preventDefault();
     keyStates[e.keyCode] = true;
 }
 
 function onKeyUp(e) {
-    if (!g_bWaitingForBarcode) e.preventDefault();
+    if (!fullKeyboardEnabled()) e.preventDefault();
     keyStates[e.keyCode] = false;
 }
+
+
+function fullKeyboardEnabled()
+{
+    state = getState();
+    switch(state) {
+        case STATE_ATTRACT:
+        case STATE_SCANNING:
+            return true;
+        default:
+            return false;
+    } // switch
+} // function
 
 // ###################################################################
 // Helpful input functions
@@ -663,6 +728,7 @@ function updateAliens(dt) {
             if (alienCount < 1) {
                 wave++;
                 g_nPauseGameUntilTime = getNow() + 2000;
+                setState(STATE_GET_READY_WAVE);
                 setupAlienFormation();
             }
             return;
@@ -696,6 +762,13 @@ function removeAllPlayerBullets() {
 } // function
 
 
+function getAlienKilledPoints()
+{
+
+
+} // function
+
+
 function resolveBulletEnemyCollisions() {
     var bullets = player.bullets;
 
@@ -705,38 +778,13 @@ function resolveBulletEnemyCollisions() {
             var alien = aliens[j];
             if (checkRectCollision(bullet.bounds, alien.bounds)) {
                 alien.alive = bullet.alive = false;
-
-                // determine color & score depending on type of alien we've hit:
-                switch (alien.clipRects) {
-                    case ALIEN_TOP_ROW:
-                        sColor = "magenta";
-                        nScore = 25;
-                        break;
-                    case ALIEN_MIDDLE_ROW:
-                        sColor = "cyan";
-                        nScore = 15;
-                        break;
-                    case ALIEN_BOTTOM_ROW:
-                        sColor = "yellow";
-                        nScore = 5;
-                        break;
-                    case ALIEN_MOTHERSHIP:
-                        sColor = "red";
-                        nScore = 250;
-                        break;
-                    default:
-                        sColor = "white";
-                        nScore = 0;
-                } // switch
-
                 sndInvaderKilled.play();
-
-                particleManager.createExplosion(alien.position.x, alien.position.y, sColor, 70, 5,5,3,.15,50);
-                player.score += nScore;
-            }
-        }
-    }
-}
+                particleManager.createExplosion(alien.position.x, alien.position.y, alien.getExplosionColour(), 70, 5,5,3,.15,50);
+                player.score += alien.getScoreValue();
+            } // if
+        } // for
+    } // for
+} // function
 
 
 function removeAllInvaderBullets() {
@@ -758,9 +806,9 @@ function resolveBulletPlayerCollisions() {
 }
 
 function playerIsHit() {
-    if (!g_bPlayerIsDead) {
+    if (!(getState() == STATE_PLAYER_FATALLY_HIT)) {
         sndPlayerHit.play();
-        particleManager.createExplosion(player.position.x, player.position.y, PLAYER_COLOUR, 100, 8, 8, 6, 0.001, 40);
+        particleManager.createExplosion(player.position.x, player.position.y, player.getExplosionColour(), 100, 8, 8, 6, 0.001, 40);
         player.lives--;
 
         removeAllInvaderBullets();
@@ -768,13 +816,15 @@ function playerIsHit() {
         if (player.lives > 0) {
             player.position.set(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 70); // init the player's position
             g_nPauseGameUntilTime = getNow() + 2000;
+            setState(STATE_GET_READY);
         } else {
-            g_bPlayerIsDead = true;
             // trigger died-screen:
-            if (nPlayerDiedTime == 0) nPlayerDiedTime = getNow();
+            nPlayerDiedTime = getNow();
+            setState(STATE_PLAYER_FATALLY_HIT);
 
             // check for highscore and store in database
             if (player.score >= nHighScore) {
+                nOldHighScore = nHighScore;
                 nHighScore = player.score;
                 localStorage.setItem("highscore", nHighScore);
                 localStorage.setItem("highscore-by", g_aCurrentPerson);
@@ -787,7 +837,7 @@ function playerIsHit() {
 
 
 function updateGame(dt) {
-    if (g_nPauseGameUntilTime == 0) {
+    if (getState() == STATE_PLAYING) {
         player.handleInput();
         prevKeyStates = keyStates.slice();
         player.update(dt);
@@ -843,15 +893,16 @@ function printText(p_sText, p_nX, p_nY, p_sAlign = "center", p_nBlinkFreq = 0, p
 function drawBottomHud() {
     ctx.fillStyle = '#02ff12';
     ctx.fillRect(0, CANVAS_HEIGHT - 30, CANVAS_WIDTH, 2);
-    printText("LIVES: "+ player.lives, 10, CANVAS_HEIGHT - 7.5, "left", 0, (player.lives >= 1 ? 'white' : 'red'), 20);
-    //for (n = 0; n < player.lives; n++) {
-    //    ctx.drawImage(spriteSheetImg, player.clipRect.x, player.clipRect.y, player.clipRect.w,
-    //        player.clipRect.h, 75 + (42 * n), CANVAS_HEIGHT - 23, player.clipRect.w * 0.5,
-    //        player.clipRect.h * 0.5);
-    //} // for
+    printText("LIVES"+ (player.lives > 1 ? ":" : ""), 10, CANVAS_HEIGHT - 7.5, "left", 0, (player.lives > 1 ? 'white' : 'red'), 20);
+    for (n = 0; n < player.lives; n++) {
+        ctx.drawImage(spriteSheetImg, player.clipRect.x, player.clipRect.y, player.clipRect.w,
+            player.clipRect.h, 75 + (20 * n * SPRITE_SCALE), CANVAS_HEIGHT - 23, player.clipRect.w * SPRITE_SCALE,
+            player.clipRect.h * SPRITE_SCALE);
+    } // for
     printText('PLAYER: '+ g_aCurrentPerson[PERSON_FIRSTNAME], CANVAS_WIDTH - 20, CANVAS_HEIGHT - 7.5, "right", 0, "white", 20);
-    printText('HIGHSCORE: '+ nHighScore, CANVAS_WIDTH - 20, 20, "right", 0, "white", 20); // will start blinking faster & faster
+    printText('HIGHSCORE: '+ Math.max(nHighScore, player.score), CANVAS_WIDTH - 20, 20, "right", (player.score > nHighScore ? 200 : 0), "white", 20); // will start blinking faster & faster
     printText('SCORE: ' + player.score, 20, 20, "left", 0, "white", 20);
+    printText('WAVE: '+ wave, CANVAS_WIDTH/2, 15, "left", 0, "white", 17);
 }
 
 function drawAliens(resized) {
@@ -866,38 +917,40 @@ function drawGame(resized) {
     drawAliens(resized);
     particleManager.draw();
     drawBottomHud();
-    if (g_nPauseGameUntilTime > 0) {
-        printText("GET READY FOR WAVE "+ wave +"!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 42, "center", 100, "yellow", 42);
-    } // if
 } // function
 
-function drawStartScreen() {
+function drawAttractScreen() {
     ctx.drawImage(imgSogetiLogo, CANVAS_WIDTH / 2 - (imgSogetiLogo.width / 4), 220, imgSogetiLogo.width / 2, imgSogetiLogo.height / 2);
 
     printText("Space Invaders", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 42, "center", 0, "white", 36);
     printText('Current highscore: '+ nHighScore, CANVAS_WIDTH/2, 42, "center", 0, "grey", 18);
 
-    if (isScanningBarcode()) {
+    if (getState() == STATE_SCANNING) {
         if ((getNow() - g_nStartedScanningBarcodeTime) < (TIME_TO_WAIT_FOR_SCANNER_TO_FINISH * 0.75)) {
             printText("SCANNING, PLEASE WAIT...", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 42, "center", 100, "cyan", 36);
         } else {
             printText("ERROR, PLEASE TRY AGAIN!", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 42, "center", 0, "red", 36);
-        }
+        } // if
     } else {
         printText("<-- SCAN YOUR BADGE TO START", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 42, "center", 500, '#FFFFFF', 36);
     } // if
 }
 
 function drawDeadScreen() {
-    if (player.score == nHighScore) {
-        printText("CONGRATULATIONS!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 100, rainbow(1, 1), 42);
-        printText("YOU HAVE BEATEN THE HIGHSCORE!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 32, "center", 0, "white", 24);
+    if (player.score > nOldHighScore) {
+        printText("CONGRATULATIONS!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 100, rainbow(), 42);
+        printText("YOU HAVE BEATEN THE LAST HIGHSCORE!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 32, "center", 0, "white", 21);
+        printText("Old highscore: "+ nOldHighScore, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 160, "center", 0, "silver", 24);
     } else {
-        printText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 0, "white", 42);
-        printText("Highscore: "+ nHighScore, CANVAS_WIDTH/2, CANVAS_HEIGHT/2, "#999", 24);
-        printText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 88, "red", 24);
+        showGameOverMessage(getState());
+//        printText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 42, "center", 0, "white", 42);
+        printText("Current highscore: "+ nHighScore, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 160, "center", 0, "silver", 24);
     } // if
-    printText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 42, "center", 0, "#999", 24);
+    printText("Your score: "+ player.score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2 + 120, "center", 0, "white", 24);
+
+    if (getState() == STATE_AFTER_DEATH) {
+        printText("Hit FIRE to continue...", CANVAS_WIDTH/2, CANVAS_HEIGHT - 42, "center", 500, "red", 18);
+    } // if
 } // function
 
 function hasValidBarcode()
@@ -915,21 +968,10 @@ function isScanningBarcode()
         if (g_nStartedScanningBarcodeTime == 0) {
             g_nStartedScanningBarcodeTime = getNow();
         } // if
-        return true
+        return true;
     } // if
     return false;
 } // function
-
-function resetGame()
-{
-    nPlayerDiedTime = 0;
-    hasGameStarted = false;
-    g_bPlayerIsDead = false;
-    g_nPauseGameUntilTime = 0;
-    g_nStartedScanningBarcodeTime = 0;
-    g_bWaitingForBarcode = true;
-    document.getElementById("barinput").value = "";
-} // if
 
 
 function getNow()
@@ -938,88 +980,208 @@ function getNow()
 } // function
 
 
-function animate() {
+function showGameOverMessage(state)
+{
+    if (state == STATE_PLAYER_FATALLY_HIT || state == STATE_RIGHT_AFTER_DEATH || state == STATE_AFTER_DEATH) {
+        printText("GAME OVER", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 42, "center", 0, "white", 42);
+    } // if
+} // function
+
+function showGetReadyMessage(state)
+{
+    if (state == STATE_GET_READY || state == STATE_GET_READY_WAVE) {
+        var sWaveText = (state == STATE_GET_READY_WAVE ? " FOR WAVE "+ wave : "");
+        printText("GET READY"+ sWaveText +"!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 142, "center", 100, "white", 42);
+    } // if
+} // function
+
+
+function getState()
+{
+    return g_nCurrentState;
+} // function
+
+function setState(p_nNewState)
+{
+    g_nCurrentState = p_nNewState;
+} // function
+
+function getStateName(p_nState)
+{
+    switch (p_nState) {
+        case STATE_RIGHT_AFTER_DEATH: return "After death summary (early)...";
+        case STATE_AFTER_DEATH: return "After death summary...";
+        case STATE_ATTRACT: return "Attract mode (ready for scanner)";
+        case STATE_SCANNING: return "Receiving barcode...";
+        case STATE_PLAYER_FATALLY_HIT: return "Player died...";
+        case STATE_GET_READY: return "Get Ready...";
+        case STATE_GET_READY_WAVE: return "Get Ready for wave...";
+        case STATE_INIT: return "Initialising";
+        case STATE_PLAYING: return "Playing :)";
+        default: return "Unkown state "+ p_nState;
+    } // switch
+} // function
+
+
+function actUponCurrentState(dt)
+{
+    var state = getState();
+
+    switch (state) {
+        case STATE_GET_READY:
+        case STATE_GET_READY_WAVE:
+            // Check the time; Do we need to stop pausing?
+            if (getNow() > g_nPauseGameUntilTime) {
+                setState(STATE_PLAYING);
+            } // if
+            break;
+
+        case STATE_PLAYING:
+            updateGame(dt / 1000); // normal operation
+            break;
+
+        case STATE_ATTRACT:
+            // be ready for barcode
+            if (isScanningBarcode()) setState(STATE_SCANNING);
+            if (hasValidBarcode()) {
+                document.getElementById("barinput").value = ""; // drop this input (it's safely stored in the database)
+                setState(STATE_GET_PLAYING);
+            } // if
+            break;
+
+        case STATE_SCANNING:
+            // receiving something, probably a barcode
+
+            // timed out?
+            if (getNow() - g_nStartedScanningBarcodeTime > TIME_TO_WAIT_FOR_SCANNER_TO_FINISH) {
+                document.getElementById("barinput").value = ""; // ja, doeiiii!
+                document.getElementById("barinput").focus(); // voor de zekerheid
+                g_nStartedScanningBarcodeTime = 0;
+                setState(STATE_ATTRACT);
+            } else {
+                // check if a valid barcode has been entered, so we can start to play!!! \o/
+                if (hasValidBarcode()) {
+                    setState(STATE_GET_PLAYING);
+                } // if
+            } // if
+            break;
+
+        case STATE_GET_PLAYING:
+            g_nPauseGameUntilTime = getNow() + 2000; // "get ready!"
+
+            // stop attract sound:
+            sndAttract.pause();
+            sndAttract.currentTime = 0; // be kind, rewind!
+
+            setState(STATE_GET_READY_WAVE);
+            initGame();
+            break;
+
+        case STATE_PLAYER_FATALLY_HIT:
+            // the player has just died
+            updateAliens(dt / 1000); // only update the aliens
+
+            // check if the timeout has expired
+            if (getNow() - nPlayerDiedTime > 2000) {
+                setState(STATE_RIGHT_AFTER_DEATH);
+            } // if
+
+            // Note: the GAME OVER message will be shown via showStateMessages
+            break;
+
+        case STATE_RIGHT_AFTER_DEATH:
+            if (getNow() - nPlayerDiedTime > 5000) {
+                setState(STATE_AFTER_DEATH);
+            } // if
+            break;
+
+        case STATE_AFTER_DEATH:
+            // after death summary
+            if (wasKeyPressed(SHOOT_KEY) || (getNow() - nPlayerDiedTime > 10000)) {
+                //setState(STATE_INIT);
+                resetGame();
+            } // if
+            break;
+    } // switch
+} // function
+
+
+function showStateMessages(dt)
+{
+    // Clear screen:
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    var state = getState();
+    switch (state) {
+        case STATE_ATTRACT:
+        case STATE_SCANNING:
+            drawAttractScreen();
+            break;
+
+        case STATE_GET_READY:
+        case STATE_GET_READY_WAVE:
+        case STATE_PLAYING:
+        case STATE_PLAYER_FATALLY_HIT:
+            showGameOverMessage(state);
+            drawGame(false);
+            showGetReadyMessage(state);
+            break;
+
+        case STATE_RIGHT_AFTER_DEATH:
+        case STATE_AFTER_DEATH:
+            // after death summary
+            // either CONGRATULATIONS or plain scoreboard
+            // return to STATE_ATTRACT after x seconds
+            drawDeadScreen();
+            break;
+    } // switch
+} // function
+
+
+
+function main_loop() {
     var now = getNow();
     var dt = parseInt(now - lastTime);
     if (dt > 100) dt = 100;
 
-    // TODO: remove debug info
-    // TODO: hide scanner box
-
     // DEBUG INFO:
     document.getElementById("debug").innerHTML = "now = "+ now +"<br>dt = "+ dt +"<br>nPlayerDiedTime = "+ nPlayerDiedTime
-        +"<br>g_nStartedScanning... = "+ g_nStartedScanningBarcodeTime +"<br>scanning? = "+ (isScanningBarcode() ? "yes":"no")
-        +"<br>hasGameStarted = "+ (hasGameStarted ? "yes":"no") +"<br>g_bWaitingForBarcode = "+ (g_bWaitingForBarcode ? "yes":"no")
+        +"<br>valid barcode? = "+ (hasValidBarcode() ? "yes":"no")
+        +"<br>is scanning barcode? = "+ (isScanningBarcode() ? "yes":"no")
+        +"<br>STATE = "+ (getState()) +" ("+ getStateName(getState()) +")"
         +"<br>LIVES = "+ (player ? player.lives : "N/A") +"<br>Score = "+ (player ? player.score : "N/A") +"<br>Highscore = "+ nHighScore
-        +"<br>g_bPlayerIsDead = "+ (g_bPlayerIsDead ? "yes":"no");
 
-    if (g_nPauseGameUntilTime > 0) document.getElementById("debug").innerHTML += "<br><b>GET READY!</b>";
-
-    // Do we need to stop pausing?
-    if ((g_nPauseGameUntilTime > 0) && (getNow() > g_nPauseGameUntilTime)) {
-        g_nPauseGameUntilTime = 0;
-    } // if
-// TODO: ombouwen naar state-machine
-    if (hasGameStarted) {
-        if (!g_bPlayerIsDead) {
-            updateGame(dt / 1000); // normal operation
-        } else {
-            if (now - nPlayerDiedTime < 2000) { // wait for the player explosion animation to finish
-                updateAliens(dt / 1000); // only update the aliens
-            } else {
-                document.getElementById("debug").innerHTML += "<br>STOPPING THE GAME";
-                hasGameStarted = false; // stop the game
-                if (now - nPlayerDiedTime > 5000) { // wait for 5 seconds before accepting FIRE to continue
-                    document.getElementById("debug").innerHTML += "<br>CHECKING FOR SHOOT_KEY ("+ (wasKeyPressed(SHOOT_KEY) ? "YES":"no");
-                    if (wasKeyPressed(SHOOT_KEY)) {
-                        resetGame();
-                    }
-                } else if (now - nPlayerDiedTime > 10000) { // wait for 30 seconds before continuing automatically
-                    resetGame();
-                } // if
-            } // if
-        } // if
-    } else {
-        // wait for no more than 10 seconds for a barcode to scan completely
-        if ((g_nStartedScanningBarcodeTime > 0) && (now - g_nStartedScanningBarcodeTime > TIME_TO_WAIT_FOR_SCANNER_TO_FINISH)) {
-            document.getElementById("barinput").value = ""; // ja, doeiiii!
-            g_nStartedScanningBarcodeTime = 0;
-        } // if
-
-        // check if a valid barcode has been entered, so we can start to play!!! \o/
-        if (hasValidBarcode()) {
-            initGame();
-            hasGameStarted = true;
-            g_bWaitingForBarcode = false;
-            g_bPlayerIsDead = false;
-            g_nPauseGameUntilTime = getNow() + 2000; // "get ready!"
-            sndAttract.pause();
-            sndAttract.currentTime = 0; // be kind, rewind!
-        }
-    } //if
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-    if (g_bPlayerIsDead && (now - nPlayerDiedTime > 2000)) {
-        drawDeadScreen();
-        hasGameStarted = false;
-    } else if (hasGameStarted) {
-        drawGame(false);
-    } else {
-        drawStartScreen();
-    } // if
-
-    if (g_bPlayerIsDead) {
-        printText("GAME OVER", CANVAS_WIDTH/2, CANVAS_HEIGHT/2 - 100, "center", 0, "white", 42);
-    } // if
+    actUponCurrentState(dt);
+    showStateMessages(dt);
 
     lastTime = now;
-    requestAnimationFrame(animate);
+    requestAnimationFrame(main_loop);
+}
+
+
+function theyInvaded() {
+    aliens = [];
+    setupAlienFormation();
+}
+
+function init() {
+    initCanvas();
+    initGame();
+    keyStates = [];
+    prevKeyStates = [];
+    resize();
 }
 
 
 
+function resetGame()
+{
+    sndAttract.play();
+    init();
+    player.reset();
+    setState(STATE_ATTRACT);
+}
 
 
 // ###################################################################
@@ -1027,8 +1189,6 @@ function animate() {
 //
 // ###################################################################
 window.onload = function() {
-    sndAttract.play();
-    init();
     resetGame();
-    animate();
+    main_loop();
 };

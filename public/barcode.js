@@ -1,7 +1,7 @@
 /*
 
 Example of scanned barcode:
-176100\\tm\\t\\tTinus\\t\\tTest\\tHage Weer 11 \\t\\t\\t1111 AA\\tPlaats\\tHBO Master - Economisch / Business\\ttest@memory.nl\\tYP\\tDe Nationale Carri&@232;rebeurs\\t06/1990\\t1980-05-30\\n
+376100\\tm\\t\\tTinus\\t\\tTest\\tHage Weer 11 \\t\\t\\t1111 AA\\tPlaats\\tHBO Master - Economisch / Business\\ttest@memory.nl\\tYP\\tDe Nationale Carri&@232;rebeurs\\t06/1990\\t1980-05-30\\n
 
 Replacing all tabs by newlines will give us:
     00: 76100                                    // Some kind of ID
@@ -70,4 +70,3 @@ function checkBarCode(p_sText)
 
     return false;
 } // function
-

@@ -10,7 +10,7 @@
 </head>
 <body style="background:#000;margin:0" onload="document.getElementById('barinput').focus()">
     <canvas id="game-canvas" width="800" height="600" style="background-color:yellow"></canvas>
-    <textarea id="barinput" style="border:0;background:#999;height:200px"></textarea>
-    <div id="debug" style="color:white;">no debug info now</div>
+    <textarea id="barinput" style="position:absolute;top:-1000px;height:200px" onblur="this.focus();"></textarea>
+    <div id="debug" style="display:none;color:white;">no debug info now</div>
 </body>
 </html>
